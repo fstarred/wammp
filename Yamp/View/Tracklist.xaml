@@ -1,0 +1,284 @@
+﻿<UserControl x:Class="Yemp.View.Tracklist"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
+             xmlns:local="clr-namespace:Yemp.View"
+             xmlns:interaction="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:vm="clr-namespace:Yemp.ViewModel"
+             xmlns:behavior="clr-namespace:Yemp.Behavior"
+             xmlns:triggers="clr-namespace:YempCommons.Triggers;assembly=YampCommons"
+             xmlns:converter="clr-namespace:Yemp.Converter"
+             xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+             xmlns:components="clr-namespace:Yemp.Components"
+             xmlns:command="clr-namespace:YempCommons.Commands;assembly=YampCommons"
+             AllowDrop="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.DataContext>
+        <vm:TracklistVM />
+    </UserControl.DataContext>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="OemPlus" Command="{Binding AddTrackCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding RemoveTrackCommand}" />
+    </UserControl.InputBindings>
+    
+    <UserControl.Resources>
+        <Storyboard x:Key="Stb_controlvalue" 
+                    Storyboard.TargetName="controlvaluetext"
+                    Storyboard.TargetProperty="Opacity"                                         
+                    Duration="0:0:4"
+                    >
+            <DoubleAnimationUsingKeyFrames>
+                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.3" />
+                <DiscreteDoubleKeyFrame Value="1" KeyTime="0:0:2.7" />
+                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="/YampCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontSize" Value="10" />
+        </Style>
+    </UserControl.Resources>
+
+    <interactivity:Interaction.Behaviors>
+        <behavior:DragDropBehavior DragEnterCommand="{Binding DragEnterCommand}" DropCommand="{Binding DropCommand}" />
+    </interactivity:Interaction.Behaviors>
+
+    <DockPanel VerticalAlignment="Stretch">
+
+        <StackPanel Orientation="Horizontal" 
+                    DockPanel.Dock="Bottom" 
+                    HorizontalAlignment="Center"
+                    Margin="2, 5, 2, 5" 
+                    >
+            <Button>
+                <Button.InputBindings>
+                    <MouseBinding Command="{Binding AddTrackCommand}" MouseAction="LeftClick" />
+                    <MouseBinding Command="{Binding AddRemoteTrackCommand}" Gesture="SHIFT+LeftClick" />
+                </Button.InputBindings>
+                <Image Margin="5, 5, 5, 5" Width="10" Height="10" Source="/Yamp;component/Assets/plus.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center"
+						            >
+                </Image>
+            </Button>
+            <Button Command="{Binding RemoveTrackCommand}" Margin="0, 0, 5, 0" >
+                <Image Margin="5, 5, 5, 5" Width="10" Height="10" Source="/Yamp;component/Assets/minus.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center">
+                </Image>
+            </Button>
+            <Button Command="{Binding MoveTrackCommand}" CommandParameter="{x:Static vm:DIRECTION.UP}">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Yamp;component/Assets/left_bracket.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+
+                </Image>
+            </Button>
+            <Button Command="{Binding MoveTrackCommand}" CommandParameter="{x:Static vm:DIRECTION.DOWN}" Margin="0, 0, 5, 0">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Yamp;component/Assets/left_bracket.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="270"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+
+                </Image>
+            </Button>
+            <Button Command="{Binding StopCommand}">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Yamp;component/Assets/stop.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center">
+                </Image>
+            </Button>
+            <Button Command="{Binding PlayCommand}" Margin="0, 0, 5, 0">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Opacity="0.5" 
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center"                                   
+						>
+                    <Image.Resources>
+                        <Style TargetType="{x:Type Image}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PlayerStatus}" Value="STOPPED">
+                                    <Setter Property="Source" Value="/Yamp;component/Assets/play.png"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PlayerStatus}" Value="PAUSED">
+                                    <Setter Property="Source" Value="/Yamp;component/Assets/play-pause-resume.png"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PlayerStatus}" Value="PLAYING">
+                                    <Setter Property="Source" Value="/Yamp;component/Assets/pause.png"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Resources>
+                </Image>
+            </Button>
+
+            <Button Command="{Binding SavePlaylistCommand}">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Yamp;component/Assets/save.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center">
+                </Image>
+            </Button>
+            <Button Command="{Binding ClearTracklistCommand}" Margin="0, 0, 5, 0">
+                <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Yamp;component/Assets/trash.png" Opacity="0.5" 
+					                HorizontalAlignment="Center"
+					                VerticalAlignment="Center">
+                </Image>
+            </Button>
+
+        </StackPanel>
+
+        <Border BorderThickness="1" Background="{DynamicResource ControlBackgroundBrush}" BorderBrush="{DynamicResource SolidBorderBrush}" DockPanel.Dock="Bottom" Margin="0, 0, 0, 10" Height="25">
+            <Label x:Name="controlvaluetext" Opacity="1" TextBlock.TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                        <Setter Property="FontFamily" Value="/YampCommons;component/Fonts/#DJB Get Digital"/>
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
+                </Label.Style>
+            </Label>
+        </Border>
+
+        <ListView ItemsSource="{Binding Tracks}" DockPanel.Dock="Top">
+           <interactivity:Interaction.Behaviors>
+                <behavior:ListBoxRefreshItemsBehavior />
+            </interactivity:Interaction.Behaviors>
+            <interactivity:Interaction.Triggers>
+                <interactivity:EventTrigger EventName="MouseDoubleClick">
+                    <interactivity:InvokeCommandAction Command="{Binding PlaySelectedTrackCommand}" />
+                </interactivity:EventTrigger>
+            </interactivity:Interaction.Triggers>
+            <ListView.Resources>
+                <components:DataContextSpy x:Key="Spy" />
+                <converter:TrackInfoConverter x:Key="TrackInfoConverter" />
+                <!--<Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"></Setter>
+                </Style>-->
+                <ContextMenu x:Key="ContextMenuItem" FontSize="9">
+                    <ContextMenu.Style>
+                        <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
+                            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"></Setter>
+                        </Style>
+                    </ContextMenu.Style>
+                    <ContextMenu.Resources>
+                        <converter:FilenameConverter x:Key="FilenameConverter"/>
+                    </ContextMenu.Resources>
+                    <MenuItem 
+                        Header="Update track info"
+                        Command="{Binding Source={StaticResource Spy}, Path=DataContext.UpdateInfoCommand}"                        
+                        >
+                        <MenuItem.Icon>
+                            <Image Width="16" Source="/Yamp;component/Assets/info.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Header="Copy track path"
+                        Command="{x:Static command:Commands.CopyTextToClipboardCommand}"
+                        CommandParameter="{Binding Location}"                        
+                        >
+                        <MenuItem.Icon>
+                            <Image Width="16" Source="/Yamp;component/Assets/clipboard.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Header="Open in explorer"
+                        Command="{x:Static command:Commands.SelectFileInExplorerCommand}"
+                        CommandParameter="{Binding Location}"                        
+                        >
+                        <MenuItem.Icon>
+                            <Image Width="16" Source="/Yamp;component/Assets/folder_open.png"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.Resources>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                    <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="FontSize" Value="10" />
+                    <Setter Property="ContextMenu" Value="{StaticResource ContextMenuItem}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+                            <Setter Property="TextElement.FontSize" Value="10" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Width="20">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image HorizontalAlignment="Left" Width="10" Source="/Yamp;component/Assets/arrow.png">
+                                    <Image.Visibility>
+                                        <MultiBinding>
+                                            <MultiBinding.Converter>
+                                                <converter:TrackCurrentIndexMatchConverter />
+                                            </MultiBinding.Converter>
+                                            <MultiBinding.Bindings>
+                                                <Binding Source="{StaticResource Spy}" Path="DataContext.CurrentIndex"></Binding>
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}">
+                                                    <Binding.Converter>
+                                                        <converter:IndexConverter></converter:IndexConverter>
+                                                    </Binding.Converter>
+                                                    <Binding.ConverterParameter>
+                                                        <mscorlib:Boolean>True</mscorlib:Boolean>
+                                                    </Binding.ConverterParameter>
+                                                </Binding>
+                                            </MultiBinding.Bindings>
+                                        </MultiBinding>
+                                    </Image.Visibility>
+                                </Image>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="#" Width="25">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}">
+                                <Binding.Converter>
+                                    <converter:IndexConverter></converter:IndexConverter>
+                                </Binding.Converter>
+                                <Binding.ConverterParameter>
+                                    <mscorlib:Boolean>True</mscorlib:Boolean>
+                                </Binding.ConverterParameter>
+                            </Binding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Width="130" Header="Title" DisplayMemberBinding="{Binding Title, Mode=OneTime, Converter={StaticResource TrackInfoConverter}}" />
+                    <GridViewColumn Width="100" Header="Artist" DisplayMemberBinding="{Binding Artist, Mode=OneTime, Converter={StaticResource TrackInfoConverter}}" />
+                    <GridViewColumn Width="100" Header="Album" DisplayMemberBinding="{Binding Album, Mode=OneTime, Converter={StaticResource TrackInfoConverter}}" />
+                    <GridViewColumn Width="50" Header="Length" DisplayMemberBinding="{Binding Length, Mode=OneTime}" />
+                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding Location, Mode=OneTime, Converter={StaticResource TrackInfoConverter}}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </DockPanel>
+
+    <interactivity:Interaction.Triggers>
+        <triggers:AdvancedEventTrigger EventName="MessageUpdated" SourceObject="{Binding }" x:Name="AEventTrigger">
+            <interaction:ControlStoryboardAction Storyboard="{StaticResource Stb_controlvalue}" />
+            <interaction:ChangePropertyAction PropertyName="Content" TargetName="controlvaluetext" Value="{Binding ElementName=AEventTrigger, Path=EventArgs.Message}" />
+        </triggers:AdvancedEventTrigger>
+    </interactivity:Interaction.Triggers>
+
+</UserControl>

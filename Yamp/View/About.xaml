@@ -1,0 +1,59 @@
+﻿<Window x:Class="Yamp.View.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Yamp.View"
+        xmlns:utility="clr-namespace:YempCommons.Utils;assembly=YampCommons"
+        xmlns:commands="clr-namespace:YempCommons.Commands;assembly=YampCommons"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"  
+        Icon="/Yamp;component/Assets/help.png"
+        Title="About" 
+        Height="400" 
+        Width="300"        
+        >
+
+    <Window.Resources>
+        <ObjectDataProvider
+            x:Key="ProductProvider"
+            ObjectType="{x:Type utility:Utility}"
+            MethodName="GetEntryAssemblyVersion"
+            ></ObjectDataProvider>
+    </Window.Resources>
+
+    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+        <Grid Margin="10">
+            <DockPanel>
+                <Button DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Name="btnClose" IsCancel="True" Content="OK" Width="70" Height="25" Margin="0, 4, 0, 0" />
+                <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Margin="3">
+                    <TextBlock HorizontalAlignment="Center">Yamp (©) 2016</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="0, 4, 0, 0">
+                        <Run Text="Version "></Run>
+                        <Run Text="{Binding Source={StaticResource ProductProvider}, Mode=OneTime}"></Run>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="0, 4, 0, 0">
+                        <Hyperlink                        
+                            Command="{Binding Source={x:Static commands:Commands.OpenUrlCommand}}"
+                            CommandParameter="{StaticResource Companyhomepage}"
+                            >                        
+                            Starred MediaSoft
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Center" Margin="0, 4, 0, 0">
+                        <Hyperlink                        
+                            Command="{Binding Source={x:Static commands:Commands.OpenUrlCommand}}"
+                            CommandParameter="{StaticResource Apphomepage}"
+                            >                        
+                            Project Site
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <Image DockPanel.Dock="Top" VerticalAlignment="Top" Source="/Yamp;component/Assets/yamp_logo.png" Width="250" />
+            </DockPanel>
+        </Grid>
+    </Border>
+
+</Window>
