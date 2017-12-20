@@ -13,10 +13,10 @@
 
         <ResourceDictionary>
 
-            <system:Uri x:Key="VersionCheckUri">http://starredmediasoft.com/yamp/yamp.xml</system:Uri>
-            <system:Uri x:Key="Apphomepage">http://starredmediasoft.com/yamp</system:Uri>
+            <system:Uri x:Key="VersionCheckUri">http://starredmediasoft.com/audio/yamp/yamp.xml</system:Uri>
+            <system:Uri x:Key="Apphomepage">http://starredmediasoft.com/audio/yamp</system:Uri>
             <system:Uri x:Key="Companyhomepage">http://starredmediasoft.com</system:Uri>
-            <system:Uri x:Key="Pluginshomepage">http://starredmediasoft.com/yamp/plugins.php</system:Uri>
+            <system:Uri x:Key="Pluginshomepage">http://starredmediasoft.com/audio/yamp/plugins.php</system:Uri>
             <system:Uri x:Key="BassRegistrationPage">http://www.bass.radio42.com/bass_register.html</system:Uri>
 
             <!--<mscorlib:String p6:Key="FacebookAppId" xmlns:p6="http://schemas.microsoft.com/winfx/2006/xaml"></mscorlib:String>
