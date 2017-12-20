@@ -106,7 +106,7 @@ namespace YempPluginContracts
 
         public virtual byte[] Icon()
         {
-            return GetIcon("YempPluginContracts.question-circle.png", System.Reflection.Assembly.GetExecutingAssembly());
+            return GetIcon("YampPluginContracts.question-circle.png", System.Reflection.Assembly.GetExecutingAssembly());
         }
 
         public virtual bool Init(string libpath, int mixer)
