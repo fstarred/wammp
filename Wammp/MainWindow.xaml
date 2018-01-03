@@ -15,7 +15,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         mc:Ignorable="d"
-        Title="Yemp" 
+        Title="{StaticResource AppTitle}" 
         Height="450" 
         Width="425" Icon="Assets/wammp_logo.png">
 

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application 
     xmlns:local="clr-namespace:Wammp" 
-    xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"     
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:system="clr-namespace:System;assembly=System"      
+    xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"      
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="Wammp.App" 
     StartupUri="MainWindow.xaml" 
@@ -13,6 +13,7 @@
 
         <ResourceDictionary>
 
+            <mscorlib:String x:Key="AppTitle">WAMMP</mscorlib:String>
             <system:Uri x:Key="VersionCheckUri">http://starredmediasoft.com/audio/wammp/wammp.xml</system:Uri>
             <system:Uri x:Key="Apphomepage">http://starredmediasoft.com/audio/wammp</system:Uri>
             <system:Uri x:Key="Companyhomepage">http://starredmediasoft.com</system:Uri>
