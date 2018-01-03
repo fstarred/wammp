@@ -1,0 +1,58 @@
+﻿<Window x:Class="WammpCommons.View.ViewMessage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:converter="clr-namespace:WammpCommons.Converter"
+        xmlns:commands="clr-namespace:WammpCommons.Commands"
+        xmlns:vm="clr-namespace:WammpCommons.ViewModel"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"                
+        mc:Ignorable="d"
+        Title="Message" 
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"     
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Icon="/WammpCommons;component/Assets/exclamation.png"
+        Height="150" Width="500">
+
+
+    <Window.DataContext>
+        <vm:MessageVM />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <converter:InverseBooleanConverter x:Key="InvToBoolConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="4" BorderThickness="1" CornerRadius="5">
+        <DockPanel>
+            <Grid DockPanel.Dock="Top">
+                <StackPanel>
+                    <Border Margin="4" BorderThickness="1" CornerRadius="5" BorderBrush="{DynamicResource SolidBorderBrush}" Background="{DynamicResource ControlBackgroundBrush}">
+                        <TextBlock Height="20" HorizontalAlignment="Stretch" Margin="5" Text="{Binding Title}" FontWeight="Bold" TextAlignment="Center"></TextBlock>
+                    </Border>
+                    <Border Margin="4" BorderThickness="1" CornerRadius="5" BorderBrush="{DynamicResource SolidBorderBrush}" Background="{DynamicResource ControlBackgroundBrush}">
+                        <TextBlock HorizontalAlignment="Center" Margin="4" Text="{Binding Message}"></TextBlock>
+                    </Border>
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Height="30" VerticalAlignment="Bottom" Margin="10">
+                <Button Width="80" Content="OK" Command="{Binding OkCommand}" IsCancel="{Binding IsConfirm, Converter={StaticResource InvToBoolConverter}}"></Button>
+                <Button Margin="5, 0, 0, 0" IsCancel="True" Width="80" Content="Cancel" Command="{Binding CancelCommand}" Visibility="{Binding IsConfirm, Converter={StaticResource BoolToVisConverter}}"></Button>
+            </StackPanel>
+        </DockPanel>
+    </Border>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ResponseSent" SourceObject="{Binding}">
+            <i:InvokeCommandAction CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Command="{Binding Source={x:Static commands:Commands.CloseWindowCommand}}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+
+</Window>

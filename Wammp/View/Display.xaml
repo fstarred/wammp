@@ -1,0 +1,396 @@
+﻿<UserControl x:Class="Wammp.View.Display"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:behavior="clr-namespace:Wammp.Behavior"
+             xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:converter="clr-namespace:Wammp.Converter"
+             xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
+             xmlns:components="clr-namespace:Wammp.Components"             
+             xmlns:vm="clr-namespace:Wammp.ViewModel"                                      
+             xmlns:ulibbass="clr-namespace:WpfControlLibraryBass.Elements;assembly=WpfControlLibraryBass"        
+             AllowDrop="True"             
+             mc:Ignorable="d" 
+             d:DesignHeight="370" d:DesignWidth="300"                         
+             >
+
+    <UserControl.DataContext>
+        <vm:DisplayVM />
+    </UserControl.DataContext>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="P" Command="{Binding PlayCommand}" />
+        <KeyBinding Modifiers="Shift" Key="Right" Command="{Binding ForwardCommand}" />
+        <KeyBinding Modifiers="Shift" Key="Left" Command="{Binding BackwardCommand}" />
+        <KeyBinding Modifiers="Shift" Key="O" Command="{Binding OpenUrlCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding OpenFolderCommand}" />
+        <KeyBinding Key="O" Command="{Binding OpenFileCommand}" />
+    </UserControl.InputBindings>
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <!-- Storyboard.TargetName="controlvaluetext" -->
+
+        <Storyboard x:Key="Stb_controlvalue" 
+                    Storyboard.TargetName="controlvaluetext" 
+                    Storyboard.TargetProperty="Opacity"                                         
+                    Duration="0:0:4"
+                    >
+            <DoubleAnimationUsingKeyFrames>
+                <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.3" />
+                <DiscreteDoubleKeyFrame Value="1" KeyTime="0:0:2.7" />
+                <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="Stb_MetaUpdated">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="Opacity"
+                Storyboard.TargetName="Panel_song_info"
+                From="1"
+                To="0"
+                RepeatBehavior="8x"
+                AutoReverse="True"                                                                                                          
+                Duration="0:0:0.3"/>
+        </Storyboard>
+
+        <converter:DataToImageConverter x:Key="DataToImageConverter" />
+    </UserControl.Resources>
+
+    <interactivity:Interaction.Behaviors>
+        <behavior:UserControlUnloadBehavior Command="{Binding SaveAudioSettingsCommand}" />
+        <behavior:DragDropBehavior DragEnterCommand="{Binding DragEnterCommand}" DropCommand="{Binding DropCommand}" />
+    </interactivity:Interaction.Behaviors>
+
+    <Grid>
+        <StackPanel>
+            <Border Background="{DynamicResource ControlBackgroundBrush}" BorderThickness="1" CornerRadius="4" Margin="10" BorderBrush="{DynamicResource SolidBorderBrush}">
+                <StackPanel>
+                    <Grid Margin="10">
+                        <Grid.Style>
+                            <Style TargetType="{x:Type Grid}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentIndex}" Value="0">
+                                        <Setter Property="Visibility" Value="Hidden"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Image Width="96" Height="96" Source="{Binding PictureData, Converter={StaticResource DataToImageConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                        <StackPanel>
+                            <StackPanel.Resources>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                                </Style>
+                            </StackPanel.Resources>
+                            <Button Width="100" Height="30" Command="{Binding ChangeSpectrumDisplayCommand}" Cursor="Hand">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <ulibbass:SpectrumAnalyzer  
+                                            Opacity="1"
+                                            VerticalAlignment="Top"                
+                                            Stream="{Binding Stream}"                                
+                                            Color="{DynamicResource NormalBrush}"
+                                            Display="{Binding CurrentSpectrumDisplay}"                                            
+                                            Width="100"
+                                            Height="30"
+                                            >
+                                            <ulibbass:SpectrumAnalyzer.Style>
+                                                <Style TargetType="{x:Type ulibbass:SpectrumAnalyzer}">
+                                                    <Setter Property="IsPlaying" Value="False"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PlayerStatus}" Value="PLAYING">
+                                                            <Setter Property="IsPlaying" Value="True"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ulibbass:SpectrumAnalyzer.Style>
+                                        </ulibbass:SpectrumAnalyzer>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <StackPanel x:Name="Panel_song_info">
+                                <TextBlock Margin="0, 5, 0, 0" HorizontalAlignment="Center" Text="{Binding Title, Mode=OneWay}" />
+                                <TextBlock Margin="0, 2, 0, 0" HorizontalAlignment="Center" Text="{Binding Artist, Mode=OneWay}" />
+                                <TextBlock Margin="0, 2, 0, 0" HorizontalAlignment="Center" Text="{Binding Album, Mode=OneWay}" />
+                            </StackPanel>
+                            <TextBlock Margin="0, 2, 0, 0" HorizontalAlignment="Center" Text="{Binding StreamInfo, Mode=OneWay}" />
+                            <TextBlock Margin="0, 2, 0, 0" HorizontalAlignment="Center" Text="{Binding LengthMMSS, Mode=OneWay}" />
+                            <Grid Margin="0, 2, 0, 0" >
+                                <TextBlock Height="50" Opacity="0.8" Text="{Binding DisplayedTime, Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="Auto" FontSize="36" Cursor="Hand">                                
+                                    <interactivity:Interaction.Triggers>
+                                        <interactivity:EventTrigger EventName="MouseDown">
+                                            <interactivity:InvokeCommandAction Command="{Binding SwitchDisplayModeCommand}"/>
+                                        </interactivity:EventTrigger>
+                                    </interactivity:Interaction.Triggers>
+                                </TextBlock>
+                                <ulibbass:PeakLevel
+                                    Stream="{Binding Stream}"
+                                    Color="{DynamicResource NormalBrush}"  
+                                    VerticalAlignment="Center"
+                                    Width="Auto"                    
+                                    BarDistance="100"
+                                    Margin="0, 0, 0, 10"
+                                    Height="20" >
+                                    <ulibbass:PeakLevel.Style>
+                                        <Style TargetType="{x:Type ulibbass:PeakLevel}">
+                                            <Setter Property="IsPlaying" Value="False"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PlayerStatus}" Value="PLAYING">
+                                                    <Setter Property="IsPlaying" Value="True"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ulibbass:PeakLevel.Style>
+                                </ulibbass:PeakLevel>
+                            </Grid>
+                            <TextBlock HorizontalAlignment="Center">
+                                <Run Text="{Binding CurrentIndex, Mode=OneWay}"></Run>
+                                <Run Text="/"></Run>
+                                <Run Text="{Binding TracksCount, Mode=OneWay}"></Run>
+                            </TextBlock>
+
+                        </StackPanel>
+                    </Grid>
+                    <Label x:Name="controlvaluetext" Opacity="0" TextBlock.TextAlignment="Center" Height="30" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource ControlBackgroundBrush}" BorderThickness="1" CornerRadius="4" Margin="10" BorderBrush="{DynamicResource SolidBorderBrush}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 2, 0, 2">
+                    <Button Command="{Binding BackwardCommand}">
+                        <Image Margin="5, 5, 5, 5" Width="24" Height="24" Source="/Wammp;component/Assets/forward.png" Opacity="0.5" 
+					    HorizontalAlignment="Center"
+					    VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5"                                   
+						>
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="1" ScaleX="-1"/>
+                                    <SkewTransform AngleY="0" AngleX="0"/>
+                                    <RotateTransform Angle="0"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+
+                    </Button>
+                    <Button Command="{Binding StopCommand}">
+
+                        <Image Margin="5, 5, 5, 5" Width="24" Height="24" Source="/Wammp;component/Assets/stop.png" Opacity="0.5" 
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center"
+					/>
+                    </Button>
+                    <Button Command="{Binding PlayCommand}">
+
+                        <Image Margin="5, 5, 5, 5" Width="24" Height="24" Opacity="0.5" 
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center"                                   
+						>
+                            <Image.Resources>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PlayerStatus}" Value="STOPPED">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/play.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PlayerStatus}" Value="PAUSED">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/play-pause-resume.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PlayerStatus}" Value="PLAYING">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/pause.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PlayerStatus}" Value="STALLED">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/pause.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Resources>
+                        </Image>
+
+                    </Button>
+
+                    <Button Command="{Binding ForwardCommand}">
+                        <Grid>
+                            <Image Margin="5, 5, 5, 5" Width="24" Height="24" Source="/Wammp;component/Assets/forward.png" Opacity="0.5" 
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center"
+					/>
+                        </Grid>
+                    </Button>
+                    <Button Command="{Binding ChangeLoopModeCommand}">
+                        <Image Margin="5, 5, 5, 5" Width="24" Height="24" Opacity="0.5"                        
+					    HorizontalAlignment="Center"
+					    VerticalAlignment="Center" >
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}" >
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding LoopMode}" Value="NONE">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/no_loop.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding LoopMode}" Value="TRACK">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/loop.png" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding LoopMode}" Value="PLAYLIST">
+                                            <Setter Property="Source" Value="/Wammp;component/Assets/loop_list.png" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
+                    <Button>
+                        <Button.InputBindings>
+                            <MouseBinding Command="{Binding OpenFileCommand}" MouseAction="LeftClick" />
+                            <MouseBinding Command="{Binding OpenFolderCommand}" MouseAction="RightClick" />
+                            <MouseBinding Command="{Binding OpenUrlCommand}" Gesture="SHIFT+LeftClick" />
+                        </Button.InputBindings>
+                        <Grid>
+                            <Image Margin="5, 5, 5, 5" Width="24" Height="24" Source="/Wammp;component/Assets/open.png" Opacity="0.5" 
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center"
+					/>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+
+            </Border>
+
+            <!-- position bar -->
+            <Slider Maximum="1000" 
+                    TickFrequency="1" 
+                    SmallChange="20" 
+                    LargeChange="50"
+                    SnapsToDevicePixels="True"
+                    Margin="10, 0, 10, 0"
+                    >
+                <Slider.Resources>
+                    <components:DataContextSpy x:Key="Spy" />
+                </Slider.Resources>
+                <Slider.Value>
+                    <Binding Path="Position">
+                        <Binding.Converter>
+                            <converter:SliderConverter TrackLength="{Binding Source={StaticResource Spy}, Path=DataContext.LengthInBytes, Mode=OneWay}" />
+                        </Binding.Converter>
+                        <Binding.ConverterParameter>
+                            <mscorlib:Int32>1000</mscorlib:Int32>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Slider.Value>
+            </Slider>
+
+
+            <Grid Margin="10, 5, 10, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Image Width="16" Height="14" Grid.Column="0" Opacity="0.5" 
+                           Margin="0, 0, 3, 0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Source="/Wammp;component/Assets/pan.png"></Image>
+
+                <!-- pan -->
+                <Slider Grid.Column="1"
+                    VerticalAlignment="Top"
+                    Minimum="-1"
+                    Maximum="1"
+                    SmallChange="0.01"
+                    LargeChange="0.05"
+                    TickFrequency="0.01"
+                    Value="{Binding Pan}"
+                    SnapsToDevicePixels="True"      
+                    IsSnapToTickEnabled="True"                
+                >
+                    <Slider.Resources>
+                        <converter:ControlValueConverter x:Key="ControlValuePanConverter" />
+                        <converter:ControlValueInfo Min="-1" Max="1" ControlType="PAN" x:Key="ControlValueInfoPan" />
+                    </Slider.Resources>
+                    <interactivity:Interaction.Triggers>
+                        <interactivity:EventTrigger EventName="MouseRightButtonDown">
+                            <interactions:ChangePropertyAction PropertyName="Value" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}" Value="0" />
+                        </interactivity:EventTrigger>
+                        <interactivity:EventTrigger EventName="ValueChanged">
+                            <interactions:ControlStoryboardAction Storyboard="{StaticResource Stb_controlvalue}" />
+                            <interactions:ChangePropertyAction TargetName="controlvaluetext" PropertyName="Content" >
+                                <interactions:ChangePropertyAction.Value>
+                                    <TextBlock>
+                                        <TextBlock>
+                                            <Run Text="Pan: "></Run><Run Text="{Binding Pan, Converter={StaticResource ControlValuePanConverter}, ConverterParameter={StaticResource ControlValueInfoPan}}"></Run>
+                                        </TextBlock>
+                                    </TextBlock>
+                                </interactions:ChangePropertyAction.Value>
+                            </interactions:ChangePropertyAction>
+                            
+                        </interactivity:EventTrigger>
+                    </interactivity:Interaction.Triggers>
+                </Slider>
+
+                <!-- volume -->
+                <Slider Grid.Column="3"                   
+                        Minimum="0"
+                        Maximum="1" 
+                        TickFrequency="0.01" 
+                        SmallChange="0.01"
+                        LargeChange="0.05"                        
+                        Value="{Binding Volume}"
+                        SnapsToDevicePixels="True"
+                        IsSnapToTickEnabled="True"
+                        >
+                    <Slider.Resources>
+                        <converter:ControlValueConverter x:Key="ControlValueVolumeConverter" />
+                        <converter:ControlValueInfo Min="0" Max="1" ControlType="VOLUME" x:Key="ControlValueInfoVolume" />
+                    </Slider.Resources>
+                    <interactivity:Interaction.Triggers>
+                        <interactivity:EventTrigger EventName="MouseRightButtonDown">
+                            <interactions:ChangePropertyAction PropertyName="Value" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}" Value="0" />
+                        </interactivity:EventTrigger>
+                        <interactivity:EventTrigger EventName="ValueChanged">
+                            <interactions:ControlStoryboardAction Storyboard="{StaticResource Stb_controlvalue}" />
+                            <interactions:ChangePropertyAction TargetName="controlvaluetext" PropertyName="Content" >
+                                <interactions:ChangePropertyAction.Value>
+                                    <TextBlock>
+                                        <TextBlock>
+                                            <Run Text="Volume: "></Run><Run Text="{Binding Volume, Converter={StaticResource ControlValueVolumeConverter}, ConverterParameter={StaticResource ControlValueInfoVolume}}"></Run>
+                                        </TextBlock>
+                                    </TextBlock>
+                                </interactions:ChangePropertyAction.Value>
+                            </interactions:ChangePropertyAction>
+                        </interactivity:EventTrigger>
+                    </interactivity:Interaction.Triggers>
+
+                </Slider>
+
+                <Image 
+                    Width="16" 
+                    Height="14" 
+                    Grid.Column="4" 
+                    Opacity="0.5" 
+                    Margin="0, 0, 3, 0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Source="/Wammp;component/Assets/volume.png"></Image>
+
+            </Grid>
+
+        </StackPanel>
+
+    </Grid>
+
+    <interactivity:Interaction.Triggers>
+        <interactivity:EventTrigger EventName="MetaUpdatedEvent" SourceObject="{Binding }">
+            <interactions:ControlStoryboardAction Storyboard="{StaticResource Stb_MetaUpdated}" />
+        </interactivity:EventTrigger>
+    </interactivity:Interaction.Triggers>
+
+</UserControl>

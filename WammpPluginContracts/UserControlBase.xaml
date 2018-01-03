@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="WammpPluginContracts.UserControlBase"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:triggers="clr-namespace:WammpCommons.Triggers;assembly=WammpCommons"
+             xmlns:command="clr-namespace:WammpCommons.Commands;assembly=WammpCommons"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </UserControl.Resources>
+    
+    <DockPanel>
+        
+        <ToolBarTray Background="Transparent" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+            <ToolBar x:Name="ToolBar" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Button x:Name="SaveBtn" Click="SaveBtn_Click" ToolTip="Save">
+                    <Image Width="16" Source="Assets/save.png"></Image>
+                </Button>
+                <Button x:Name="LoadBtn" Click="LoadBtn_Click" ToolTip="Load">
+                    <Image Width="16" Source="Assets/load.png"></Image>
+                </Button>
+                <Button x:Name="Version" ToolTip="Version" Click="Version_Click">
+                    <Image Width="16" Source="Assets/rss.png"></Image>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid>
+            <ContentPresenter x:Name="ContentPresenter">
+
+            </ContentPresenter>
+            <!-- message section -->
+            <Border BorderThickness="1" Background="{DynamicResource ControlBackgroundBrush}" BorderBrush="{DynamicResource SolidBorderBrush}" Width="300" Margin="0, 0, 0, 10" Height="25" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+                <Label Content="{Binding Message, NotifyOnTargetUpdated=True}" TextBlock.TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                            <BeginStoryboard>
+                                <Storyboard                                             
+                                    Storyboard.TargetProperty="Opacity"                                         
+                                    Duration="0:0:4"
+                                    >
+                                    <DoubleAnimationUsingKeyFrames>
+                                        <LinearDoubleKeyFrame Value="1" KeyTime="0:0:0.3" />
+                                        <DiscreteDoubleKeyFrame Value="1" KeyTime="0:0:2.7" />
+                                        <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                    <Label.Style>
+                        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+                            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+                            <Setter Property="FontSize" Value="12" />
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </Border>
+        </Grid>
+    </DockPanel>
+
+    <UserControl.DataContext>
+        <Binding ElementName="ContentPresenter" Path="Content.DataContext"></Binding>
+    </UserControl.DataContext>
+
+    <interactivity:Interaction.Triggers>
+        <triggers:AdvancedEventTrigger EventName="MessageEvent" SourceObject="{Binding }" x:Name="AEventTrigger">
+            <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=AEventTrigger, Path=EventArgs.Message}" />
+        </triggers:AdvancedEventTrigger>
+        <triggers:AdvancedEventTrigger EventName="NewVersionFoundEvent" SourceObject="{Binding }" x:Name="NewVersionFoundEventTrigger">
+            <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=NewVersionFoundEventTrigger, Path=EventArgs.Message}" />
+        </triggers:AdvancedEventTrigger>
+        <triggers:AdvancedEventTrigger EventName="VersionUpToDateEvent" SourceObject="{Binding }" x:Name="VersionUpToDateEventTrigger">
+            <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=VersionUpToDateEventTrigger, Path=EventArgs.Message}" />
+        </triggers:AdvancedEventTrigger>
+        <triggers:AdvancedEventTrigger EventName="NetworkErrorEvent" SourceObject="{Binding }" x:Name="NetworkErrorEventTrigger">
+            <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=NetworkErrorEventTrigger, Path=EventArgs.Message}" />
+        </triggers:AdvancedEventTrigger>
+        <!--<interactivity:EventTrigger EventName="NewVersionFoundEvent" SourceObject="{Binding}" >
+            <interactions:ChangePropertyAction PropertyName="Message" TargetObject="{Binding }" Value="{Binding MetaInfoUrl}" />
+        </interactivity:EventTrigger>-->
+    </interactivity:Interaction.Triggers>
+
+</UserControl>

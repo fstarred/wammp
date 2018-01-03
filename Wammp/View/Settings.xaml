@@ -1,0 +1,246 @@
+﻿<Window x:Class="Wammp.View.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:commands="clr-namespace:WammpCommons.Commands;assembly=WammpCommons"
+        xmlns:components="clr-namespace:Wammp.Components"
+        xmlns:helper="clr-namespace:Wammp.Helper"
+        xmlns:behavior="clr-namespace:Wammp.Behavior"
+        xmlns:converter="clr-namespace:Wammp.Converter"
+        xmlns:command="clr-namespace:WammpCommons.Commands;assembly=WammpCommons"
+        xmlns:vm="clr-namespace:Wammp.ViewModel"
+        xmlns:serloc="clr-namespace:Wammp.ServiceLocator"
+        DataContext="{Binding Source={x:Static serloc:ViewModelLocator.Instance}, Path=SettingsVM}"
+        mc:Ignorable="d"
+        Title="Settings"
+        WindowStyle="None"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner"        
+        Background="Transparent" 
+        AllowsTransparency="True"
+        Height="350" Width="300"     
+        components:ThemeSelector.Theme="{Binding SelectedTheme}"
+        >
+    
+
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+        </Style>
+    </Window.Resources>
+    
+    <Border BorderThickness="3" BorderBrush="{DynamicResource SolidBorderBrush}" CornerRadius="5">
+        <DockPanel Background="{DynamicResource ControlBackgroundBrush}">
+            <Border BorderThickness="0, 0, 0, 3" BorderBrush="{DynamicResource SolidBorderBrush}" DockPanel.Dock="Top" >
+                <Grid Background="{DynamicResource ControlBackgroundBrush}" HorizontalAlignment="Stretch">
+                    <interactivity:Interaction.Behaviors>
+                        <behavior:DraggableBehavior />
+                    </interactivity:Interaction.Behaviors>
+                    <Button HorizontalAlignment="Right" IsCancel="True" Margin="0, 3, 5, 3" Width="20" Content="x" />
+                </Grid>
+            </Border>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 10, 0, 10">
+                <Button Width="60" x:Name="savebtn" IsEnabled="False" Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding}" />
+                <Button Width="60" Margin="5, 0, 0, 0" x:Name="reloadbtn" IsEnabled="False" Command="{Binding ReloadCommand}" Content="Reload" />
+                <!-- a shortcut for closing the window on escape button -->
+                <!--<Button IsCancel="True" Width="0"></Button>-->
+            </StackPanel>
+
+            <TabControl DockPanel.Dock="Top" SelectedIndex="0">
+                <TabItem Header="General">
+                    <StackPanel Margin="5" helper:NotifierPanelHelper.EnableNotifier="True">
+                        <TextBlock HorizontalAlignment="Center">Devices</TextBlock>
+                        <ComboBox ItemsSource="{Binding Devices}" SelectedIndex="{Binding SelectedDevice}" Margin="5" />
+                        <Button Content="About" Width="100" Height="30" Margin="0, 20, 0, 0" Name="aboutbtn" Click="aboutbtn_Click"  />
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Network">
+                    <StackPanel Margin="5">
+                        <Grid helper:NotifierPanelHelper.EnableNotifier="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <CheckBox Margin="0, 10, 0, 10" Grid.Row="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center" IsChecked="{Binding EnableProxy}">Enable Proxy</CheckBox>
+                            <TextBlock Margin="0, 3, 5, 0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right">Host</TextBlock>
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="5, 3, 0, 0" Width="150" HorizontalAlignment="Left" Text="{Binding Host}" />
+
+                            <TextBlock Margin="0, 3, 5, 0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right">Port</TextBlock>
+                            <TextBox Grid.Row="3" Grid.Column="1" Margin="5, 3, 0, 0"  Width="40" TextAlignment="Right" HorizontalAlignment="Left" Text="{Binding Port}" />
+
+                            <CheckBox Margin="0, 10, 0, 10" Grid.Row="4" HorizontalAlignment="Center"  Grid.ColumnSpan="2" IsChecked="{Binding EnableCredentials}">Enable Credentials</CheckBox>
+
+                            <TextBlock Margin="0, 3, 5, 0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">User</TextBlock>
+                            <TextBox Grid.Row="5" Grid.Column="1" Margin="5, 3, 0, 0"  Width="100" HorizontalAlignment="Left" Text="{Binding User}" />
+
+                            <TextBlock Margin="0, 3, 5, 0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right">Password</TextBlock>
+                            <PasswordBox Grid.Row="6" Grid.Column="1" Margin="5, 3, 0, 0"  Width="100" HorizontalAlignment="Left">
+                                <interactivity:Interaction.Behaviors>
+                                    <behavior:PasswordBoxConfigBehavior AssociatedProperty="Password" />
+                                </interactivity:Interaction.Behaviors>
+                            </PasswordBox>
+
+                            <TextBlock Margin="0, 3, 5, 0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right">Domain</TextBlock>
+                            <TextBox Grid.Row="7" Grid.Column="1" Margin="5, 3, 0, 0"  Width="100" HorizontalAlignment="Left" Text="{Binding Domain}" />
+
+                        </Grid>
+
+                        <Button Margin="5, 15, 5, 5" Width="150" Content="Check for updates" Command="{Binding CheckUpdatesCommand}"></Button>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Bass">
+                    <StackPanel Margin="5">
+                        <TextBlock HorizontalAlignment="Center">
+                            <Hyperlink TextDecorations="None" Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" CommandParameter="{StaticResource BassRegistrationPage}">
+                                <Image Stretch="None" Source="/Wammp;component/Assets/logo_bass.gif" />
+                            </Hyperlink>
+                        </TextBlock>
+                        
+
+                        <Grid HorizontalAlignment="Stretch" Margin="20, 15, 20, 0" helper:NotifierPanelHelper.EnableNotifier="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="User" HorizontalAlignment="Right" Margin="0, 0, 0, 0"></TextBlock>
+                            <TextBox Grid.Column="1" Width="150" Text="{Binding BassUser}" />
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Code" HorizontalAlignment="Right" Margin="0, 5, 0, 0"></TextBlock>
+                            <TextBox Grid.Column="1" Grid.Row="1" Width="150" Margin="0, 5, 0, 0" Text="{Binding BassCode}" />
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Plugins">
+                    <StackPanel Margin="5">
+                        <StackPanel.Resources>
+                            <converter:EmptyToBoolConverter x:Key="EmptyToBoolConverter" />
+                        </StackPanel.Resources>
+                        <Grid helper:NotifierPanelHelper.EnableNotifier="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70*"></ColumnDefinition>
+                                <ColumnDefinition Width="10*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <ListBox DockPanel.Dock="Left" ItemsSource="{Binding Plugins}" SelectedItem="{Binding SelectedPlugin}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200" />
+                                                <ColumnDefinition Width="30" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Plugin.Name}" />
+                                            <CheckBox Grid.Column="1" IsChecked="{Binding IsEnabled}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+
+                            <StackPanel Grid.Column="1"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top" 
+                                            Margin="2" 
+                                            IsEnabled="{Binding SelectedPlugin, Converter={StaticResource EmptyToBoolConverter}}">
+                                <Button Margin="2" Command="{Binding ChangePluginOrderCommand}" CommandParameter="{x:Static vm:DIRECTION.UP}">
+                                    <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Wammp;component/Assets/left_bracket.png" Opacity="0.5" 
+					                        HorizontalAlignment="Center"
+					                        VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="90"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+
+                                    </Image>
+                                </Button>
+                                <Button Margin="2" Command="{Binding ChangePluginOrderCommand}" CommandParameter="{x:Static vm:DIRECTION.DOWN}">
+                                    <Image Margin="5, 5, 5, 5" Width="16" Height="16" Source="/Wammp;component/Assets/left_bracket.png" Opacity="0.5" 
+					                        HorizontalAlignment="Center"
+					                        VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="270"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+
+                                    </Image>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <Button Content="Plugins homepage" 
+                                Margin="0, 5, 0, 0"
+                                Height="30"
+                                Width="150"
+                                Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" 
+                                CommandParameter="{StaticResource Pluginshomepage}" />
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Layout">
+                    <StackPanel Margin="5" helper:NotifierPanelHelper.EnableNotifier="True">
+                        <TextBlock HorizontalAlignment="Center" Margin="2">Theme</TextBlock>
+                        <ComboBox Margin="20, 0, 20, 0" SelectedValue="{Binding SelectedTheme}" SelectedValuePath="Tag">
+                            <ComboBox.Items>
+                                <ComboBoxItem Content="Extension Dark" Tag="/Wammp;component/Themes/ExpressionDark.xaml"/>
+                                <ComboBoxItem Content="Extension Light" Tag="/Wammp;component/Themes/ExpressionLight.xaml"/>
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+                </TabItem>
+
+            </TabControl>
+
+        </DockPanel>
+
+    </Border>
+
+    <interactivity:Interaction.Triggers>
+        <helper:RoutedEventTrigger RoutedEvent="{x:Static helper:NotifierPanelHelper.ChildrenChangedEvent}">
+            <interactions:ChangePropertyAction TargetName="savebtn" PropertyName="IsEnabled" Value="True" />
+            <interactions:ChangePropertyAction TargetName="reloadbtn" PropertyName="IsEnabled" Value="True" />
+        </helper:RoutedEventTrigger>
+        <interactivity:EventTrigger EventName="SettingsSavedEvent" SourceObject="{Binding}">
+            <interactions:ChangePropertyAction TargetName="savebtn" PropertyName="IsEnabled" Value="False" />
+            <interactions:ChangePropertyAction TargetName="reloadbtn" PropertyName="IsEnabled" Value="False" />
+        </interactivity:EventTrigger>
+        <interactivity:EventTrigger EventName="SettingsReloadEvent" SourceObject="{Binding}">
+            <interactions:ChangePropertyAction TargetName="savebtn" PropertyName="IsEnabled" Value="False" />
+            <interactions:ChangePropertyAction TargetName="reloadbtn" PropertyName="IsEnabled" Value="False" />
+        </interactivity:EventTrigger>
+        <interactivity:EventTrigger EventName="RequestHomepageEvent" SourceObject="{Binding}">
+            <interactivity:InvokeCommandAction CommandParameter="{StaticResource Apphomepage}" Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" />
+        </interactivity:EventTrigger>
+        <!--<interactivity:EventTrigger EventName="Loaded">
+            <interactivity:InvokeCommandAction Command="{Binding InitCommand}" />
+        </interactivity:EventTrigger>-->
+        <interactivity:EventTrigger EventName="Unloaded">
+            <interactivity:InvokeCommandAction Command="{Binding DisposeCommand}" />
+        </interactivity:EventTrigger>
+    </interactivity:Interaction.Triggers>
+    
+    
+    
+</Window>
