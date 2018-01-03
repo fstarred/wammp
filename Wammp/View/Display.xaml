@@ -10,7 +10,7 @@
              xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
              xmlns:components="clr-namespace:Wammp.Components"             
              xmlns:vm="clr-namespace:Wammp.ViewModel"                                      
-             xmlns:ulibbass="clr-namespace:WpfControlLibraryBass.Elements;assembly=WpfControlLibraryBass"        
+             xmlns:ulibbass="clr-namespace:WpfControlLibraryBass.Elements;assembly=basscntrl"        
              AllowDrop="True"             
              mc:Ignorable="d" 
              d:DesignHeight="370" d:DesignWidth="300"                         
@@ -31,7 +31,7 @@
 
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
             <Setter Property="FontSize" Value="12" />
         </Style>
 

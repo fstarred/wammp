@@ -5,15 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:interactions="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:triggers="clr-namespace:WammpCommons.Triggers;assembly=WammpCommons"
-             xmlns:command="clr-namespace:WammpCommons.Commands;assembly=WammpCommons"
+             xmlns:triggers="clr-namespace:WammpCommons.Triggers;assembly=commons"
+             xmlns:command="clr-namespace:WammpCommons.Commands;assembly=commons"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
     
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="White" />
         </Style>
@@ -59,7 +59,7 @@
                     </Label.Triggers>
                     <Label.Style>
                         <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+                            <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
                             <Setter Property="FontSize" Value="12" />
                         </Style>
                     </Label.Style>

@@ -8,11 +8,11 @@
              xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:vm="clr-namespace:Wammp.ViewModel"
              xmlns:behavior="clr-namespace:Wammp.Behavior"
-             xmlns:triggers="clr-namespace:WammpCommons.Triggers;assembly=WammpCommons"
+             xmlns:triggers="clr-namespace:WammpCommons.Triggers;assembly=commons"
              xmlns:converter="clr-namespace:Wammp.Converter"
              xmlns:mscorlib="clr-namespace:System;assembly=mscorlib"
              xmlns:components="clr-namespace:Wammp.Components"
-             xmlns:command="clr-namespace:WammpCommons.Commands;assembly=WammpCommons"
+             xmlns:command="clr-namespace:WammpCommons.Commands;assembly=commons"
              AllowDrop="True"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -40,7 +40,7 @@
         </Storyboard>
 
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
             <Setter Property="FontSize" Value="10" />
         </Style>
     </UserControl.Resources>
@@ -151,7 +151,7 @@
             <Label x:Name="controlvaluetext" Opacity="1" TextBlock.TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <Label.Style>
                     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-                        <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+                        <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
                         <Setter Property="FontSize" Value="12" />
                     </Style>
                 </Label.Style>

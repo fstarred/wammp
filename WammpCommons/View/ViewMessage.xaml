@@ -13,7 +13,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"     
         Background="{DynamicResource WindowBackgroundBrush}"
-        Icon="/WammpCommons;component/Assets/exclamation.png"
+        Icon="/commons;component/Assets/exclamation.png"
         Height="150" Width="500">
 
 

@@ -36,7 +36,7 @@
         </Storyboard>
 
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="FontFamily" Value="/WammpCommons;component/Fonts/#DJB Get Digital"/>
+            <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
             <Setter Property="FontSize" Value="12" />
         </Style>
     </UserControl.Resources>
