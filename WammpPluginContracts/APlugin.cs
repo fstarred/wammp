@@ -36,18 +36,46 @@ namespace WammpPluginContracts
         public event EventHandler VersionUpToDateEvent;
         public event EventHandler NewVersionFoundEvent;
         public event EventHandler NetworkErrorEvent;
+        
+        protected EventHandler<EventArgs> settingsSaved;
+        public event EventHandler<EventArgs> SettingsSaved
+        {
+            add
+            {
+                settingsSaved -= value;
+                settingsSaved += value;                
+            }
+            remove
+            {
+                settingsSaved -= value;
+            }
+        }
 
-        public event EventHandler<EventArgs> SettingsSaved;
-        public event EventHandler<SignalArgs> SendActionSignal;
+        protected EventHandler<SignalArgs> sendActionSignal;
+        public event EventHandler<SignalArgs> SendActionSignal
+        {
+            add
+            {
+                sendActionSignal -= value;
+                sendActionSignal += value;
+            }
+            remove
+            {
+                sendActionSignal -= value;
+            }
+        }
+
+        // DO NOT REMOVE !!!
         public event EventHandler MessageEvent;
 
-        //The event-invoking method that derived classes can override.
+        //NOTICE: Not used so far
+        //The event-invoking method that derived classes can override.        
         protected virtual void OnSettingsSaved(object sender, EventArgs e)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            EventHandler<EventArgs> handler = SettingsSaved;
+            EventHandler<EventArgs> handler = settingsSaved;
             if (handler != null)
             {
                 handler(sender, e);                
@@ -56,13 +84,14 @@ namespace WammpPluginContracts
             Message = "Settings saved";
         }
 
+        //NOTICE: Not used so far
         //The event-invoking method that derived classes can override.
         protected virtual void OnSendActionSignal(object sender, SignalArgs e)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            EventHandler<SignalArgs> handler = SendActionSignal;
+            EventHandler<SignalArgs> handler = sendActionSignal;
             if (handler != null)
             {
                 handler(sender, e);
@@ -111,10 +140,6 @@ namespace WammpPluginContracts
 
         public virtual bool Init(string libpath, int mixer)
         {
-            //this.GetVersionCommand = new MvvmFoundation.Wpf.RelayCommand(() =>
-            //{
-                //TinyIoC.TinyIoCContainer current = TinyIoC.TinyIoCContainer.Current;
-            //});
             return true;
         }
 
