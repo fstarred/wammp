@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using System.Windows.Media.Imaging;
+using Wammp.Helper;
 using Wammp.ViewModel;
 using WammpPluginContracts;
 
@@ -23,54 +24,97 @@ namespace Wammp.Behavior
             TabControlBehavior behavior = obj as TabControlBehavior;
 
             TabControl tabctrl = behavior.AssociatedObject;
-            
-            if (tabctrl != null)
-            {
-                foreach (TabItem item in tabctrl.Items)
-                {
-                    item.Tag = TAB_TYPE.STANDARD;
-                }
 
+            int pluginsCount = System.Linq.Enumerable.ToArray(behavior.Plugins).Length;
+
+            if (tabctrl != null && pluginsCount > 0 && !behavior.IsAlreadyInit)
+            {
+                if (!behavior.IsAlreadyInit)
+                {
+                    foreach (TabItem item in tabctrl.Items)
+                    {
+                        item.Tag = TAB_TYPE.STANDARD;
+                    }
+                }
+                //else
+                //{
+                //    for (int i=0; i<tabctrl.Items.Count; i++)
+                //    {
+                //        if (((TabItem)tabctrl.Items[i]).Tag.Equals(TAB_TYPE.PLUGIN))
+                //        {
+                //            tabctrl.Items.RemoveAt(i);
+                //        }
+                //    }                    
+                //}
+
+                behavior.IsAlreadyInit = true;
+                
                 foreach (PluginVM item in behavior.Plugins)
                 {
                     if (item.IsEnabled)
                     {
-                        if (item.Plugin.ViewType == behavior.ViewType)
+                        switch (behavior.ViewType)
                         {
-                            byte[] icon = item.Plugin.Icon();
-                            BitmapImage image = new BitmapImage();
+                            case VIEW_TYPE.MAIN:
+                                if (item.Plugin.View != null)
+                                {
+                                    byte[] icon = item.Plugin.Icon();
+                                    BitmapImage image = new BitmapImage();
 
-                            if (icon != null && icon.Length > 0)
-                            {
-                                image = (BitmapImage)new Wammp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
-                            }
+                                    if (icon != null && icon.Length > 0)
+                                    {
+                                        image = (BitmapImage)new Wammp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
+                                    }
 
-                            Image imageControl = new Image();
+                                    Image imageControl = new Image();
 
-                            imageControl.Source = image;
-                            imageControl.Width = 32;
-                            imageControl.Height = 32;
-                            if (image.CanFreeze)
-                            {
-                                image.Freeze();
-                            }
+                                    imageControl.Source = image;
+                                    imageControl.Width = 32;
+                                    imageControl.Height = 32;
+                                    if (image.CanFreeze)
+                                    {
+                                        image.Freeze();
+                                    }
 
-                            TabItem t = new TabItem();
-                            t.Tag = TAB_TYPE.PLUGIN;
-                            //t.Header = image ?? item.Plugin.Name;
-                            t.Header = imageControl;
-                            //t.Content = item.Plugin.View;
-                            UserControlBase ucb = new WammpPluginContracts.UserControlBase();
+                                    TabItem t = new TabItem();
+                                    t.Tag = TAB_TYPE.PLUGIN;
+                                    //t.Header = image ?? item.Plugin.Name;
+                                    t.Header = imageControl;
+                                    //t.Content = item.Plugin.View;
+                                    UserControlBase ucb = new WammpPluginContracts.UserControlBase();
 
-                            ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
-                            if (item.Plugin.ToolBar != null)
-                            {
-                                ToolBar tb = item.Plugin.ToolBar as ToolBar;
-                                ((ToolBarTray)ucb.FindName("ToolBarTray")).ToolBars.Add(tb);                                
-                            }
-                            t.Content = ucb;
+                                    ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
+                                    if (item.Plugin.ToolBar != null)
+                                    {
+                                        ToolBar tb = item.Plugin.ToolBar as ToolBar;
+                                        ((ToolBarTray)ucb.FindName("ToolBarTray")).ToolBars.Add(tb);
+                                    }
+                                    t.Content = ucb;
 
-                            tabctrl.Items.Add(t);
+                                    tabctrl.Items.Add(t);
+                                }
+                                break;
+                            case VIEW_TYPE.SETTINGS:
+                                if (item.Plugin.SettingsView != null)
+                                {
+                                    TabItem t = new TabItem();
+                                    t.Tag = TAB_TYPE.PLUGIN;
+                                    t.Header = item.Plugin.Name;
+
+                                    UserControl uc = item.Plugin.SettingsView as UserControl;
+
+                                    Panel p = uc.Content as Panel;
+
+                                    if (p != null)
+                                        NotifierPanelHelper.SetEnableNotifier(p, true);
+
+                                    t.Content = uc;
+
+                                    //t.Content = item.Plugin.SettingsView;
+
+                                    tabctrl.Items.Add(t);
+                                }
+                                break;
                         }
                     }
                 }
@@ -86,52 +130,17 @@ namespace Wammp.Behavior
             set { SetValue(PluginsProperty, value); }
         }
 
+        bool IsAlreadyInit { get; set; }
+
         protected override void OnAttached()
         {
-            //TabControl tabctrl = this.AssociatedObject;
-
-            //foreach (PluginVM item in Plugins)
-            //{
-            //    if (item.IsEnabled)
-            //    {
-            //        if (item.Plugin.ViewType == this.ViewType)
-            //        {
-            //            byte[] icon = item.Plugin.Icon();
-            //            BitmapImage image = new BitmapImage();
-
-            //            if (icon != null && icon.Length > 0)
-            //            {
-            //                image = (BitmapImage)new Yemp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
-            //            }
-
-            //            Image imageControl = new Image();
-
-            //            imageControl.Source = image;
-            //            imageControl.Width = 32;
-            //            imageControl.Height = 32;
-            //            if (image.CanFreeze)
-            //            {
-            //                image.Freeze();
-            //            }
-
-            //            TabItem t = new TabItem();
-            //            //t.Header = image ?? item.Plugin.Name;
-            //            t.Header = imageControl;
-            //            //t.Content = item.Plugin.View;
-            //            UserControlBase ucb = new YempPluginContracts.UserControlBase();
-
-            //            ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
-            //            t.Content = ucb;
-                        
-            //            tabctrl.Items.Add(t);
-            //        }
-            //    }                           
-            //}
+            if (!IsAlreadyInit)
+                PluginsChanged(this, new DependencyPropertyChangedEventArgs());
         }
 
         protected override void OnDetaching()
         {
-
+            IsAlreadyInit = false;
         }
     }
 }

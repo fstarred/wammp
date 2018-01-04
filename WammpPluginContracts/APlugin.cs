@@ -121,10 +121,18 @@ namespace WammpPluginContracts
             }
         }
 
-        public abstract VIEW_TYPE ViewType
+        public virtual object SettingsView
         {
-            get;
+            get
+            {
+                return null;
+            }
         }
+
+        //public abstract VIEW_TYPE ViewType
+        //{
+        //    get;
+        //}
 
         public virtual IWebProxy Proxy
         {

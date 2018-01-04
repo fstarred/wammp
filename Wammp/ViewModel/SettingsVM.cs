@@ -121,9 +121,15 @@ namespace Wammp.ViewModel
             {
                 Name = i.Plugin.Name,
                 IsEnabled = i.IsEnabled,
-                Position = this.plugins.IndexOf(i)
+                Position = this.plugins.IndexOf(i)                
 
             }).ToList();
+
+            foreach (PluginVM item in this.plugins)
+            {
+                if (item.Plugin.CanLoadSave())
+                    item.Plugin.Save();                
+            }
 
             service.Save();
 
@@ -168,8 +174,10 @@ namespace Wammp.ViewModel
                 if (plugin != null)
                 {
                     item.IsEnabled = plugin.IsEnabled;
-                    item.Position = plugin.Position;
+                    item.Position = plugin.Position;                    
                 }
+                if (item.IsEnabled && item.Plugin.CanLoadSave())
+                    item.Plugin.Load();
             }
 
             this.Plugins = new ObservableCollection<PluginVM>(source.OrderBy(i => i.Position));

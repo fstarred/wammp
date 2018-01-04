@@ -31,7 +31,7 @@ namespace WammpPluginContracts
 
         string Message { get; }
 
-        VIEW_TYPE ViewType { get; }
+        //VIEW_TYPE ViewType { get; }
 
         bool Init(string libpath, int mixer);
 
@@ -48,6 +48,8 @@ namespace WammpPluginContracts
         byte[] Icon();
 
         object View { get; }
+
+        object SettingsView { get; }
 
         object ToolBar { get; }
 
