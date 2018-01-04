@@ -5,7 +5,6 @@ using Wammp.Components;
 using Wammp.Naming;
 using Wammp.Services;
 using WammpCommons.Services;
-using WammpCommons.Services;
 using WammpCommons.ViewModel;
 
 namespace Wammp

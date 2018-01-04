@@ -11,6 +11,8 @@ namespace Wammp.Behavior
 {
     class TabControlBehavior : Behavior<TabControl>
     {
+        enum TAB_TYPE { STANDARD, PLUGIN }
+
         public VIEW_TYPE ViewType { get; set; }
 
         public static readonly DependencyProperty PluginsProperty =
@@ -21,45 +23,62 @@ namespace Wammp.Behavior
             TabControlBehavior behavior = obj as TabControlBehavior;
 
             TabControl tabctrl = behavior.AssociatedObject;
-
-            foreach (PluginVM item in behavior.Plugins)
+            
+            if (tabctrl != null)
             {
-                if (item.IsEnabled)
+                foreach (TabItem item in tabctrl.Items)
                 {
-                    if (item.Plugin.ViewType == behavior.ViewType)
+                    item.Tag = TAB_TYPE.STANDARD;
+                }
+
+                foreach (PluginVM item in behavior.Plugins)
+                {
+                    if (item.IsEnabled)
                     {
-                        byte[] icon = item.Plugin.Icon();
-                        BitmapImage image = new BitmapImage();
-
-                        if (icon != null && icon.Length > 0)
+                        if (item.Plugin.ViewType == behavior.ViewType)
                         {
-                            image = (BitmapImage)new Wammp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
+                            byte[] icon = item.Plugin.Icon();
+                            BitmapImage image = new BitmapImage();
+
+                            if (icon != null && icon.Length > 0)
+                            {
+                                image = (BitmapImage)new Wammp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
+                            }
+
+                            Image imageControl = new Image();
+
+                            imageControl.Source = image;
+                            imageControl.Width = 32;
+                            imageControl.Height = 32;
+                            if (image.CanFreeze)
+                            {
+                                image.Freeze();
+                            }
+
+                            TabItem t = new TabItem();
+                            t.Tag = TAB_TYPE.PLUGIN;
+                            //t.Header = image ?? item.Plugin.Name;
+                            t.Header = imageControl;
+                            //t.Content = item.Plugin.View;
+                            UserControlBase ucb = new WammpPluginContracts.UserControlBase();
+
+                            ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
+                            if (item.Plugin.ToolBar != null)
+                            {
+                                ToolBar tb = item.Plugin.ToolBar as ToolBar;
+                                ((ToolBarTray)ucb.FindName("ToolBarTray")).ToolBars.Add(tb);                                
+                            }
+                            t.Content = ucb;
+
+                            tabctrl.Items.Add(t);
                         }
-
-                        Image imageControl = new Image();
-
-                        imageControl.Source = image;
-                        imageControl.Width = 32;
-                        imageControl.Height = 32;
-                        if (image.CanFreeze)
-                        {
-                            image.Freeze();
-                        }
-
-                        TabItem t = new TabItem();
-                        //t.Header = image ?? item.Plugin.Name;
-                        t.Header = imageControl;
-                        //t.Content = item.Plugin.View;
-                        UserControlBase ucb = new WammpPluginContracts.UserControlBase();
-
-                        ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
-                        t.Content = ucb;
-
-                        tabctrl.Items.Add(t);
                     }
                 }
             }
+
+            
         }
+        
 
         public IEnumerable<PluginVM> Plugins
         {

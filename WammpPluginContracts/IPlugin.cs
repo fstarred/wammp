@@ -49,6 +49,8 @@ namespace WammpPluginContracts
 
         object View { get; }
 
+        object ToolBar { get; }
+
         void TracklistUpdated(string[] filenames);
 
         void CurrentTrackIndexChanged(int index);

@@ -113,6 +113,14 @@ namespace WammpPluginContracts
             get;
         }
 
+        public virtual object ToolBar
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public abstract VIEW_TYPE ViewType
         {
             get;
