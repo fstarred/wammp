@@ -51,6 +51,20 @@ namespace WammpPluginContracts
             }
         }
 
+        protected EventHandler<EventArgs> settingsLoaded;
+        public event EventHandler<EventArgs> SettingsLoaded
+        {
+            add
+            {
+                settingsLoaded -= value;
+                settingsLoaded += value;
+            }
+            remove
+            {
+                settingsLoaded -= value;
+            }
+        }
+
         protected EventHandler<SignalArgs> sendActionSignal;
         public event EventHandler<SignalArgs> SendActionSignal
         {
@@ -166,7 +180,7 @@ namespace WammpPluginContracts
         public virtual void RetrieveInfo(string filename, BASS_CHANNELINFO info, TAG_INFO tagInfo) { }
 
         public virtual void Save() { }
-
+        
         public virtual void TracklistUpdated(string[] filenames) { }
 
         protected virtual byte[] GetIcon(string input, System.Reflection.Assembly assembly)

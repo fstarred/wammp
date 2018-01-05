@@ -180,7 +180,12 @@ namespace Wammp.ViewModel
                     item.Plugin.Load();
             }
 
-            this.Plugins = new ObservableCollection<PluginVM>(source.OrderBy(i => i.Position));
+            //this.Plugins = new ObservableCollection<PluginVM>(source.OrderBy(i => i.Position));
+            /* avoid memory leaks (multiple calls on Helper.TabControlBehavior) */
+            if (this.plugins == null)
+                this.plugins = new ObservableCollection<PluginVM>();
+            this.plugins.ToList().All(i => this.plugins.Remove(i));
+            source.OrderBy(i => i.Position).All(o => { this.plugins.Add(o); return true; });
 
             IAudioConfigProvider audioservice = container.Resolve<IAudioConfigProvider>(ContainerNSR.AUDIO_SETTINGS);
 

@@ -18,7 +18,7 @@ namespace Wammp.Behavior
         public static readonly DependencyProperty PluginsProperty =
            DependencyProperty.RegisterAttached("Plugins", typeof(IEnumerable<PluginVM>), typeof(TabControlBehavior), new PropertyMetadata(PluginsChanged));
 
-        private static void PluginsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        static void InitTab(DependencyObject obj)
         {
             TabControlBehavior behavior = obj as TabControlBehavior;
 
@@ -109,10 +109,15 @@ namespace Wammp.Behavior
                                 }
 
                                 break;
-                        }                            
+                        }
                     }
                 }
             }
+        }
+
+        private static void PluginsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            InitTab(obj);
         }
         public IEnumerable<PluginVM> Plugins
         {
@@ -124,46 +129,7 @@ namespace Wammp.Behavior
         protected override void OnAttached()
         {
             if (!IsAlreadyInit)
-                PluginsChanged(this, new DependencyPropertyChangedEventArgs());
-            //TabControl tabctrl = this.AssociatedObject;
-
-            //foreach (PluginVM item in Plugins)
-            //{
-            //    if (item.IsEnabled)
-            //    {
-            //        if (item.Plugin.ViewType == this.ViewType)
-            //        {
-            //            byte[] icon = item.Plugin.Icon();
-            //            BitmapImage image = new BitmapImage();
-
-            //            if (icon != null && icon.Length > 0)
-            //            {
-            //                image = (BitmapImage)new Yemp.Converter.DataToImageConverter().Convert(icon, typeof(BitmapImage), null, CultureInfo.CurrentCulture);
-            //            }
-
-            //            Image imageControl = new Image();
-
-            //            imageControl.Source = image;
-            //            imageControl.Width = 32;
-            //            imageControl.Height = 32;
-            //            if (image.CanFreeze)
-            //            {
-            //                image.Freeze();
-            //            }
-
-            //            TabItem t = new TabItem();
-            //            //t.Header = image ?? item.Plugin.Name;
-            //            t.Header = imageControl;
-            //            //t.Content = item.Plugin.View;
-            //            UserControlBase ucb = new YempPluginContracts.UserControlBase();
-
-            //            ((ContentPresenter)ucb.FindName("ContentPresenter")).Content = item.Plugin.View;
-            //            t.Content = ucb;
-
-            //            tabctrl.Items.Add(t);
-            //        }
-            //    }                           
-            //}
+                InitTab(this);            
         }
 
         protected override void OnDetaching()

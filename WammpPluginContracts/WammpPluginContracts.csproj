@@ -79,7 +79,6 @@
     <EmbeddedResource Include="question-circle.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\load.png" />
     <Resource Include="Assets\save.png" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +89,9 @@
       <Project>{1714716e-e4c9-452c-a39e-a7f9c55fb8b0}</Project>
       <Name>WammpCommons</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\load.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

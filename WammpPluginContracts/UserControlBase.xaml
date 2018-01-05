@@ -100,6 +100,7 @@
         <triggers:AdvancedEventTrigger EventName="NetworkErrorEvent" SourceObject="{Binding }" x:Name="NetworkErrorEventTrigger">
             <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=NetworkErrorEventTrigger, Path=EventArgs.Message}" />
         </triggers:AdvancedEventTrigger>
+
         <!--<interactivity:EventTrigger EventName="NewVersionFoundEvent" SourceObject="{Binding}" >
             <interactions:ChangePropertyAction PropertyName="Message" TargetObject="{Binding }" Value="{Binding MetaInfoUrl}" />
         </interactivity:EventTrigger>-->
