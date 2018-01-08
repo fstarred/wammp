@@ -1,3 +1,5 @@
 theme: jekyll-theme-cayman
 show_downloads: "true"
 title: "WAMMP"
+plugins:
+  - jekyll-seo-tag
