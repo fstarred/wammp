@@ -46,16 +46,16 @@ namespace Wammp.ViewModel
 
                 CheckBassRegistration();
 
-                bool init = AudioControllerService.Instance.Init();
+                bool init = AudioControllerService.Current.Init();
 
                 CheckProxySettings();
 
-                AudioControllerService.Instance.CreateMixerChannel();
+                AudioControllerService.Current.CreateMixerChannel();
 
-                AudioControllerService.Instance.MetaUpdated += Instance_MetaUpdated;
-                AudioControllerService.Instance.StreamCreated += Instance_StreamCreated;
-                AudioControllerService.Instance.StreamEnded += Instance_StreamEnded;
-                AudioControllerService.Instance.StatusChanged += Instance_StatusChanged;
+                AudioControllerService.Current.MetaUpdated += Instance_MetaUpdated;
+                AudioControllerService.Current.StreamCreated += Instance_StreamCreated;
+                AudioControllerService.Current.StreamEnded += Instance_StreamEnded;
+                AudioControllerService.Current.StatusChanged += Instance_StatusChanged;
 
                 TracklistProvider.Instance.IndexChanged += Instance_IndexChanged;
                 TracklistProvider.Instance.Tracks.CollectionChanged += Tracks_CollectionChanged;
@@ -195,7 +195,7 @@ namespace Wammp.ViewModel
             
             if (!(string.IsNullOrEmpty(service.BassUser) || string.IsNullOrEmpty(service.BassCode)))
             {
-                AudioControllerService.Instance.RegisterBass(service.BassUser, service.BassCode);
+                AudioControllerService.Current.RegisterBass(service.BassUser, service.BassCode);
             }
         }
 
@@ -209,7 +209,7 @@ namespace Wammp.ViewModel
 
             if (service.EnableProxy || service.EnableCredentials)
             {
-                AudioControllerService.Instance.SetProxy(service.Host, service.Port, service.User, service.Password);
+                AudioControllerService.Current.SetProxy(service.Host, service.Port, service.User, service.Password);
             }
         }
 
@@ -250,7 +250,7 @@ namespace Wammp.ViewModel
             {
                 if (item.IsEnabled)
                 {
-                    item.Plugin.RetrieveInfo(TracklistProvider.Instance.GetCurrentTrack().Location, AudioControllerService.Instance.ChannelInfo, tagInfo);                   
+                    item.Plugin.RetrieveInfo(TracklistProvider.Instance.GetCurrentTrack().Location, AudioControllerService.Current.ChannelInfo, tagInfo);                   
                 }
             }
         }
@@ -314,13 +314,13 @@ namespace Wammp.ViewModel
 
         private void Instance_StreamCreated(int channel)
         {
-            int stream = AudioControllerService.Instance.Stream;
+            int stream = AudioControllerService.Current.Stream;
 
             foreach (PluginVM item in Plugins)
             {
                 if (item.IsEnabled)
                 {
-                    item.Plugin.RetrieveInfo(TracklistProvider.Instance.GetCurrentTrack().Location, AudioControllerService.Instance.ChannelInfo, AudioControllerService.Instance.TagInfo);
+                    item.Plugin.RetrieveInfo(TracklistProvider.Instance.GetCurrentTrack().Location, AudioControllerService.Current.ChannelInfo, AudioControllerService.Current.TagInfo);
 
                     int pStream = item.Plugin.PrepareStream(stream);
 
@@ -329,16 +329,16 @@ namespace Wammp.ViewModel
                 }
             }
 
-            AudioControllerService.Instance.AddMixerChannel(stream);
+            AudioControllerService.Current.AddMixerChannel(stream);
 
             //AudioControllerService.Instance.SetPosition(0);
 
-            AudioControllerService.Instance.Play(false);
+            AudioControllerService.Current.Play(false);
         }
 
         private void Instance_StreamEnded()
         {
-            LOOP_MODE loopMode = AudioControllerService.Instance.LoopMode;
+            LOOP_MODE loopMode = AudioControllerService.Current.LoopMode;
 
             int currentTrackIndex = TracklistProvider.Instance.CurrentIndex;
 
@@ -353,11 +353,11 @@ namespace Wammp.ViewModel
                         if (TracklistProvider.Instance.Tracks.Count > 0)
                         {
                             TracklistProvider.Instance.SetCurrentIndex(0);
-                            AudioControllerService.Instance.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
+                            AudioControllerService.Current.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
                         }
                     }
                     else
-                        AudioControllerService.Instance.Stop();
+                        AudioControllerService.Current.Stop();
                 }
 
                 const bool autoForwardTracklist = true;
@@ -367,7 +367,7 @@ namespace Wammp.ViewModel
                     if (isLastTrack == false)
                     {
                         TracklistProvider.Instance.SetCurrentIndex(currentTrackIndex + 1);
-                        AudioControllerService.Instance.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
+                        AudioControllerService.Current.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
                     }
                 }
 
@@ -376,13 +376,13 @@ namespace Wammp.ViewModel
 
         private void Instance_IndexChanged(int index)
         {
-            BASSActive status = AudioControllerService.Instance.GetStreamStatus();
+            BASSActive status = AudioControllerService.Current.GetStreamStatus();
 
             if (TracklistProvider.Instance.CurrentIndex == TracklistProvider.NO_TRACK_SELECTED_INDEX
                 && status == BASSActive.BASS_ACTIVE_PLAYING
                 || status == BASSActive.BASS_ACTIVE_PAUSED)
             {
-                AudioControllerService.Instance.Stop();
+                AudioControllerService.Current.Stop();
             }
 
             foreach (PluginVM item in Plugins)
@@ -445,7 +445,7 @@ namespace Wammp.ViewModel
             {
                 if (plugin.IsEnabled)
                 {
-                    bool init = plugin.Plugin.Init(AudioControllerService.Instance.LibPath, AudioControllerService.Instance.StreamMixer);
+                    bool init = plugin.Plugin.Init(AudioControllerService.Current.LibPath, AudioControllerService.Current.StreamMixer);
                     if (!init)
                     {
                         plugin.IsEnabled = false;
@@ -464,14 +464,14 @@ namespace Wammp.ViewModel
                         switch (args.Action)
                         {
                             case PLAYER_ACTION.RESET:                                
-                                AudioControllerService.Instance.Pause();
-                                AudioControllerService.Instance.SetPosition(0);                                
+                                AudioControllerService.Current.Pause();
+                                AudioControllerService.Current.SetPosition(0);                                
                                 break;
                             case PLAYER_ACTION.PLAY:
-                                AudioControllerService.Instance.Play(false);
+                                AudioControllerService.Current.Play(false);
                                 break;
                             case PLAYER_ACTION.STOP:
-                                AudioControllerService.Instance.Stop();
+                                AudioControllerService.Current.Stop();
                                 break;
                         }
                     };
