@@ -1,3 +1,9 @@
 theme: jekyll-theme-cayman
 show_downloads: "true"
 title: "WAMMP"
+description: "W.A.M.M.P. (Windows Audio Modular Media Player, aka WAMMP) project is a pluggable player for windows. It can features a lot of tools for musicians and music listeners as well"
+author: "Starred MediaSoft"
+logo: "Wammp/Assets/wammp_logo.png"
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
