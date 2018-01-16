@@ -6,3 +6,4 @@ author: "Starred MediaSoft"
 logo: "Wammp/Assets/wammp_logo.png"
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
