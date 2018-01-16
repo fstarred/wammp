@@ -9,8 +9,8 @@
              xmlns:command="clr-namespace:WammpCommons.Commands;assembly=commons"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    
-    
+
+
     <UserControl.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="FontFamily" Value="/commons;component/Fonts/#DJB Get Digital"/>
@@ -18,10 +18,10 @@
             <Setter Property="Foreground" Value="White" />
         </Style>
     </UserControl.Resources>
-    
+
     <DockPanel>
-        
-        <ToolBarTray Background="Transparent" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+
+        <ToolBarTray x:Name="ToolBarTray" Background="Transparent" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
             <ToolBar x:Name="ToolBar" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
                 <Button x:Name="SaveBtn" Click="SaveBtn_Click" ToolTip="Save">
                     <Image Width="16" Source="Assets/save.png"></Image>
@@ -34,12 +34,26 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
-        <Grid>
-            <ContentPresenter x:Name="ContentPresenter">
 
-            </ContentPresenter>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!-- content section -->
+            <ContentPresenter                  
+                x:Name="ContentPresenter"                 
+                />
             <!-- message section -->
-            <Border BorderThickness="1" Background="{DynamicResource ControlBackgroundBrush}" BorderBrush="{DynamicResource SolidBorderBrush}" Width="300" Margin="0, 0, 0, 10" Height="25" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <Border Grid.Row="1"
+                    BorderThickness="1" 
+                    Background="{DynamicResource ControlBackgroundBrush}" 
+                    BorderBrush="{DynamicResource SolidBorderBrush}" 
+                    Width="300" 
+                    Height="25" 
+                    Margin="0, 0, 0, 10"                     
+                    HorizontalAlignment="Stretch"                                                             
+                    >
                 <Label Content="{Binding Message, NotifyOnTargetUpdated=True}" TextBlock.TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label.Triggers>
                         <EventTrigger RoutedEvent="Binding.TargetUpdated">
@@ -68,6 +82,7 @@
         </Grid>
     </DockPanel>
 
+
     <UserControl.DataContext>
         <Binding ElementName="ContentPresenter" Path="Content.DataContext"></Binding>
     </UserControl.DataContext>
@@ -85,6 +100,7 @@
         <triggers:AdvancedEventTrigger EventName="NetworkErrorEvent" SourceObject="{Binding }" x:Name="NetworkErrorEventTrigger">
             <interactivity:InvokeCommandAction Command="{Binding Source={x:Static command:Commands.ShowMessageCommand}}" CommandParameter="{Binding ElementName=NetworkErrorEventTrigger, Path=EventArgs.Message}" />
         </triggers:AdvancedEventTrigger>
+
         <!--<interactivity:EventTrigger EventName="NewVersionFoundEvent" SourceObject="{Binding}" >
             <interactions:ChangePropertyAction PropertyName="Message" TargetObject="{Binding }" Value="{Binding MetaInfoUrl}" />
         </interactivity:EventTrigger>-->

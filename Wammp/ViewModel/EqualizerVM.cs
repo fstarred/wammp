@@ -23,7 +23,7 @@ namespace Wammp.ViewModel
         {
             if (!Utility.IsDesignMode())
             {
-                AudioControllerService.Instance.StreamCreated += Instance_StreamCreated;
+                AudioControllerService.Current.StreamCreated += Instance_StreamCreated;
 
                 Reload();
             }
@@ -35,7 +35,7 @@ namespace Wammp.ViewModel
         
         void Instance_StreamCreated(int channel)
         {
-            AudioControllerService acservice = AudioControllerService.Instance;
+            AudioControllerService acservice = AudioControllerService.Current;
 
             acservice.InitEQ(EQ_BANDS);
 
@@ -64,7 +64,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq0 = value;
-                AudioControllerService.Instance.SetEQ(0, eq0);
+                AudioControllerService.Current.SetEQ(0, eq0);
                 RaisePropertyChanged(() => Eq0);                
             }
         }
@@ -79,7 +79,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq1 = value;
-                AudioControllerService.Instance.SetEQ(1, eq1);
+                AudioControllerService.Current.SetEQ(1, eq1);
                 RaisePropertyChanged(() => Eq1);
             }
         }
@@ -94,7 +94,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq2 = value;
-                AudioControllerService.Instance.SetEQ(2, eq2);
+                AudioControllerService.Current.SetEQ(2, eq2);
                 RaisePropertyChanged(() => Eq2);
             }
         }
@@ -106,7 +106,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq3 = value;
-                AudioControllerService.Instance.SetEQ(3, eq3);
+                AudioControllerService.Current.SetEQ(3, eq3);
                 RaisePropertyChanged(() => Eq3);
             }
         }
@@ -118,7 +118,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq4 = value;
-                AudioControllerService.Instance.SetEQ(4, eq4);
+                AudioControllerService.Current.SetEQ(4, eq4);
                 RaisePropertyChanged(() => Eq4);
             }
         }
@@ -130,7 +130,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq5 = value;
-                AudioControllerService.Instance.SetEQ(5, eq5);
+                AudioControllerService.Current.SetEQ(5, eq5);
                 RaisePropertyChanged(() => Eq5);
             }
         }
@@ -142,7 +142,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq6 = value;
-                AudioControllerService.Instance.SetEQ(6, eq6);
+                AudioControllerService.Current.SetEQ(6, eq6);
                 RaisePropertyChanged(() => Eq6);
             }
         }
@@ -155,7 +155,7 @@ namespace Wammp.ViewModel
             set
             {
                 eq7 = value;
-                AudioControllerService.Instance.SetEQ(7, eq7);
+                AudioControllerService.Current.SetEQ(7, eq7);
                 RaisePropertyChanged(() => Eq7);
             }
         }

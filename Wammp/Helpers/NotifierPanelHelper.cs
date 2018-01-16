@@ -109,6 +109,7 @@ namespace Wammp.Helper
 
                 foreach (Panel childPanel in panels)
                 {
+                    System.Diagnostics.Debug.WriteLine(childPanel.Name);
                     AttachAllNotifierEvents(childPanel, args);
                 }                
             }
@@ -116,8 +117,7 @@ namespace Wammp.Helper
             public static void AttachTextBoxNotifier(Panel panel, RoutedEventArgs eve)
             {
                 GetCollection<TextBox>(panel).All(t =>
-                    {
-                        
+                    {                        
                         t.TextChanged += (sender, e) =>
                         {
                             if (eve != null)

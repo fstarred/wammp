@@ -209,7 +209,9 @@
                         </ComboBox>
                     </StackPanel>
                 </TabItem>
-
+                <interactivity:Interaction.Behaviors>
+                    <behavior:TabControlBehavior ViewType="SETTINGS" Plugins="{Binding Plugins, Mode=OneWay}" />
+                </interactivity:Interaction.Behaviors>
             </TabControl>
 
         </DockPanel>

@@ -5,7 +5,6 @@ using Wammp.Components;
 using Wammp.Naming;
 using Wammp.Services;
 using WammpCommons.Services;
-using WammpCommons.Services;
 using WammpCommons.ViewModel;
 
 namespace Wammp
@@ -25,7 +24,7 @@ namespace Wammp
             container.Register<IDialogFileService>((c, n) =>
             {
                 DialogFileService service = new DialogFileService();
-                service.Filter = AudioControllerService.Instance.FileSupportedExtFilter;
+                service.Filter = AudioControllerService.Current.FileSupportedExtFilter;
 
                 return service;
 

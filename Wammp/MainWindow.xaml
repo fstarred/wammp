@@ -39,7 +39,7 @@
                     </Button>
                 </StackPanel>
             </Border>
-            <TabControl x:Name="tabCtrl" SelectedIndex="0" >
+            <TabControl x:Name="tabCtrl" SelectedIndex="0">
                 <TabItem>
                     <TabItem.Header>
                         <Image Width="32" Height="32" Source="/Wammp;component/Assets/display.png" />
@@ -59,7 +59,7 @@
                     <view:Equalizer />
                 </TabItem>
                 <interactivity:Interaction.Behaviors>
-                    <behavior:TabControlBehavior ViewType="MAIN" Plugins="{Binding Plugins, Mode=OneWay}" />
+                    <behavior:TabControlBehavior ViewType="MAIN" Plugins="{Binding Plugins, Mode=OneWay}" />                    
                 </interactivity:Interaction.Behaviors>
             </TabControl>
         </DockPanel>
