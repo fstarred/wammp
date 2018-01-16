@@ -342,7 +342,13 @@ namespace Wammp.ViewModel
             set {
                 selectedPlugin = value;
                 RaisePropertyChanged(() => SelectedPlugin);
+                RaisePropertyChanged(() => PluginVersion);
             }
+        }
+        
+        public string PluginVersion
+        {
+            get { return selectedPlugin?.Plugin.GetCurrentVersion().ToString(); }            
         }
 
 

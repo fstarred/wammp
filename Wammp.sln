@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WammpPluginContracts", "Wam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wammp", "Wammp\Wammp.csproj", "{4F43FD07-2CDD-410A-8CFA-F2AA2A9C1F92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncoderPlugin", "..\wammp_plugins\EncoderPlugin\EncoderPlugin.csproj", "{EA793B8E-E87A-479D-8378-1D8AA49829C5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{4F43FD07-2CDD-410A-8CFA-F2AA2A9C1F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F43FD07-2CDD-410A-8CFA-F2AA2A9C1F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F43FD07-2CDD-410A-8CFA-F2AA2A9C1F92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA793B8E-E87A-479D-8378-1D8AA49829C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA793B8E-E87A-479D-8378-1D8AA49829C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA793B8E-E87A-479D-8378-1D8AA49829C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA793B8E-E87A-479D-8378-1D8AA49829C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
