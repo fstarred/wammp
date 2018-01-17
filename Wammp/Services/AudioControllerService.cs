@@ -26,14 +26,14 @@ namespace Wammp.Services
 
     public class AudioControllerService
     {
-        private AudioControllerService()
+        public AudioControllerService()
         {
             timer = new BASSTimer(TIMER_MS_INTERVAL);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
 
-        #region events
+        #region Events
 
         public delegate void StatusChangedEventHandler(BASSActive status);
 
@@ -89,15 +89,20 @@ namespace Wammp.Services
 
         #endregion
 
+        #region DownloadProd
+
         DOWNLOADPROC downloadProc;
+
+        #endregion
+
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             BASSActive status = GetStreamStatus();
 
-            if (status != LastStatus)
+            if (status != CurrentStatus)
             {
-                LastStatus = status;
+                CurrentStatus = status;
                 OnStatusChanged(status);
             }
         }
@@ -124,7 +129,7 @@ namespace Wammp.Services
 
         public string LibPath { get; private set; }
 
-        BASSActive LastStatus { get; set; }
+        BASSActive CurrentStatus { get; set; }
 
         BASSTimer timer;
 
@@ -132,13 +137,16 @@ namespace Wammp.Services
 
         const int TIMER_MS_INTERVAL = 100;
 
-        static AudioControllerService instance;
+        static AudioControllerService current;
 
-        public static AudioControllerService Instance
+        /// <summary>
+        /// Lazy created Singleton instance of the container for simple scenarios
+        /// </summary>
+        public static AudioControllerService Current
         {
             get
             {
-                return instance ?? (instance = new AudioControllerService());
+                return current ?? (current = new AudioControllerService());
             }
         }
 
@@ -320,7 +328,7 @@ namespace Wammp.Services
             OnMetaUpdated(TagInfo);
         }
 
-        public bool IsMusicStream()
+        public bool IsMusicModule()
         {
             if (this.ChannelInfo == null) return false;
 
@@ -329,15 +337,15 @@ namespace Wammp.Services
 
         public void SetVolume(float volume)
         {
-            bool isModule = IsMusicStream();
+            bool isMusicModule = IsMusicModule();
 
             //forced to false
-            isModule = false;
+            isMusicModule = false;
 
             BASSAttribute attrib;
             int stream;
 
-            if (isModule)
+            if (isMusicModule)
             {
                 attrib = BASSAttribute.BASS_ATTRIB_MUSIC_VOL_GLOBAL;
                 stream = this.Stream;
@@ -356,7 +364,7 @@ namespace Wammp.Services
             BASSAttribute attrib;
             int stream;
 
-            bool isModule = IsMusicStream();
+            bool isModule = IsMusicModule();
 
             isModule = false;
 
@@ -419,14 +427,7 @@ namespace Wammp.Services
             this.StreamMixer = mixer;
 
             this.StreamPlugged = source;
-
-            //if (ChannelType != CHANNEL_TYPE.REMOTE_URL)
-            //{ 
-            //    syncProcEnd = new SYNCPROC(SyncProcEndCallback);
-                
-            //    mySyncHandleEnd = Bass.BASS_ChannelSetSync(mixer, BASSSync.BASS_SYNC_END, 0, syncProcEnd, IntPtr.Zero);
-            //}
-
+            
             return BassMix.BASS_Mixer_StreamAddChannel(mixer, source, BASSFlag.BASS_MIXER_NORAMPIN);            
         }
 

@@ -11,6 +11,14 @@ namespace Wammp.Settings
     class AudioControllerSettings : ApplicationSettingsBase
     {
         [UserScopedSettingAttribute()]
+        [DefaultSettingValue("true")]
+        public bool UpgradeRequired
+        {
+            get { return (bool)(this["UpgradeRequired"]); }
+            set { this["UpgradeRequired"] = value; }
+        }
+
+        [UserScopedSettingAttribute()]
         [DefaultSettingValue("1")]
         public int Device
         {

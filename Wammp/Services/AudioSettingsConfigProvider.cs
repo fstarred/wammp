@@ -38,6 +38,13 @@ namespace Wammp.Services
 
         public void Load()
         {
+            if (Settings.UpgradeRequired)
+            {
+                Settings.Upgrade();
+                Settings.UpgradeRequired = false;
+                Settings.Save();
+            }
+
             this.Volume = Settings.Volume;
             this.Pan = Settings.Pan;
             this.EqValues = Settings.EqValues != null ?

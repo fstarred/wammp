@@ -7,6 +7,14 @@ namespace Wammp.Settings
     sealed class AppSettings : ApplicationSettingsBase
     {
         [UserScopedSettingAttribute()]
+        [DefaultSettingValue("true")]
+        public bool UpgradeRequired
+        {
+            get { return (bool)(this["UpgradeRequired"]); }
+            set { this["UpgradeRequired"] = value; }
+        }
+
+        [UserScopedSettingAttribute()]
         [DefaultSettingValue("false")]
         public bool EnableProxy
         {

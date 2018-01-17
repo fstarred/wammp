@@ -23,7 +23,7 @@ namespace Wammp.ViewModel
         {
             if (!Utility.IsDesignMode())
             {
-                AudioControllerService.Instance.StatusChanged += Instance_StatusChanged;
+                AudioControllerService.Current.StatusChanged += Instance_StatusChanged;
 
                 TracklistProvider.Instance.IndexChanged += Instance_IndexChanged;
                 TracklistProvider.Instance.Tracks.CollectionChanged += Tracks_CollectionChanged;                
@@ -162,13 +162,13 @@ namespace Wammp.ViewModel
 
                 foreach (string path in files)
                 {
-                    if (Un4seen.Bass.Utils.BASSAddOnIsFileSupported(AudioControllerService.Instance.PluginsLoaded, path) || path.StartsWith("http"))
+                    if (Un4seen.Bass.Utils.BASSAddOnIsFileSupported(AudioControllerService.Current.PluginsLoaded, path) || path.StartsWith("http"))
                     {
                         supportedFiles.Add(path);
                     }
                     else if (Utils.AudioUtility.IsPlaylist(path))
                     {
-                        supportedFiles.AddRange(Utils.AudioUtility.GetTracksFromPlaylistFile(path, AudioControllerService.Instance.PluginsLoaded));
+                        supportedFiles.AddRange(Utils.AudioUtility.GetTracksFromPlaylistFile(path, AudioControllerService.Current.PluginsLoaded));
                     }
                 }
 
@@ -194,12 +194,12 @@ namespace Wammp.ViewModel
 
         void Play()
         {
-            BASSActive status = AudioControllerService.Instance.GetStreamStatus();
+            BASSActive status = AudioControllerService.Current.GetStreamStatus();
 
             if (SelectedTracks.Count() > 0 && status == BASSActive.BASS_ACTIVE_STOPPED)
             {
                 TracklistProvider.Instance.SetCurrentIndex(Tracks.IndexOf(SelectedTracks.First()));
-                AudioControllerService.Instance.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
+                AudioControllerService.Current.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
             }
             else
             {
@@ -207,12 +207,12 @@ namespace Wammp.ViewModel
                 {
                     case BASSActive.BASS_ACTIVE_PLAYING:
 
-                        AudioControllerService.Instance.Pause();
+                        AudioControllerService.Current.Pause();
 
                         break;
                     case BASSActive.BASS_ACTIVE_PAUSED:
 
-                        AudioControllerService.Instance.Play(false);
+                        AudioControllerService.Current.Play(false);
 
                         break;
                     default:
@@ -223,7 +223,7 @@ namespace Wammp.ViewModel
                             {
                                 TracklistProvider.Instance.SetCurrentIndex(0);
                             }
-                            AudioControllerService.Instance.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
+                            AudioControllerService.Current.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
                         }
 
                         break;
@@ -236,7 +236,7 @@ namespace Wammp.ViewModel
                     if (TracklistProvider.Instance.Tracks.Count > 0)
                     {
                         TracklistProvider.Instance.SetCurrentIndex(0);
-                        AudioControllerService.Instance.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
+                        AudioControllerService.Current.LoadFile(TracklistProvider.Instance.GetCurrentTrack().Location);
                         //AudioControllerService.Instance.Play(false);
                     }
                 }
@@ -305,12 +305,12 @@ namespace Wammp.ViewModel
 
         void Stop()
         {
-            AudioControllerService.Instance.Stop();
+            AudioControllerService.Current.Stop();
         }
 
         void PlaySelectedTrack()
         {
-            AudioControllerService.Instance.Stop();
+            AudioControllerService.Current.Stop();
             Play();
         }
 

@@ -12,6 +12,7 @@
         xmlns:command="clr-namespace:WammpCommons.Commands;assembly=commons"
         xmlns:vm="clr-namespace:Wammp.ViewModel"
         xmlns:serloc="clr-namespace:Wammp.ServiceLocator"
+        xmlns:plugcontr="clr-namespace:WammpPluginContracts;assembly=plugins"
         DataContext="{Binding Source={x:Static serloc:ViewModelLocator.Instance}, Path=SettingsVM}"
         mc:Ignorable="d"
         Title="Settings"
@@ -140,7 +141,7 @@
                             <ListBox DockPanel.Dock="Left" ItemsSource="{Binding Plugins}" SelectedItem="{Binding SelectedPlugin}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid helper:NotifierPanelHelper.EnableNotifier="True"> 
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="200" />
                                                 <ColumnDefinition Width="30" />
@@ -151,7 +152,6 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-
 
                             <StackPanel Grid.Column="1"
                                             HorizontalAlignment="Center"
@@ -190,12 +190,44 @@
                                 </Button>
                             </StackPanel>
                         </Grid>
+                        
+                        <!--<TextBlock Margin="0, 5, 0, 5" FontSize="8">Plugins order may affect processing of the playing audio *</TextBlock> -->
+                        <Border BorderThickness="1" BorderBrush="{DynamicResource SolidBorderBrush}" CornerRadius="5" Margin="3">
+                            <Grid Margin="3">
+                                <Grid.Resources>
+                                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                        <Setter Property="FontSize" Value="9" />
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:"></TextBlock>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=SelectedPlugin.Plugin.Name}"></TextBlock>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Author:"></TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=SelectedPlugin.Plugin.AuthorName}"></TextBlock>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Version:"></TextBlock>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=PluginVersion}"></TextBlock>
+                            </Grid>
+                        </Border>
+
                         <Button Content="Plugins homepage" 
-                                Margin="0, 5, 0, 0"
+                                Margin="0, 5, 0, 5"
                                 Height="30"
                                 Width="150"
                                 Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" 
                                 CommandParameter="{StaticResource Pluginshomepage}" />
+
+                        <!--<TextBlock FontSize="9" Text="Advice: Restart is required"></TextBlock>-->
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Layout">
@@ -209,7 +241,9 @@
                         </ComboBox>
                     </StackPanel>
                 </TabItem>
-
+                <interactivity:Interaction.Behaviors>
+                    <behavior:TabControlBehavior ViewType="SETTINGS" Plugins="{Binding Plugins, Mode=OneWay}" />
+                </interactivity:Interaction.Behaviors>
             </TabControl>
 
         </DockPanel>
