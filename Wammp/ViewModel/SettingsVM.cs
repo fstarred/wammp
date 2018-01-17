@@ -424,7 +424,7 @@ namespace Wammp.ViewModel
         }
         
         void ChangePluginOrder(DIRECTION input)
-        {
+        {            
             int index = plugins.IndexOf(selectedPlugin);
             switch (input)
             {

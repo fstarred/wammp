@@ -141,7 +141,7 @@
                             <ListBox DockPanel.Dock="Left" ItemsSource="{Binding Plugins}" SelectedItem="{Binding SelectedPlugin}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid helper:NotifierPanelHelper.EnableNotifier="True"> 
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="200" />
                                                 <ColumnDefinition Width="30" />
@@ -190,12 +190,7 @@
                                 </Button>
                             </StackPanel>
                         </Grid>
-                        <Button Content="Plugins homepage" 
-                                Margin="0, 5, 0, 5"
-                                Height="30"
-                                Width="150"
-                                Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" 
-                                CommandParameter="{StaticResource Pluginshomepage}" />
+                        
                         <!--<TextBlock Margin="0, 5, 0, 5" FontSize="8">Plugins order may affect processing of the playing audio *</TextBlock> -->
                         <Border BorderThickness="1" BorderBrush="{DynamicResource SolidBorderBrush}" CornerRadius="5" Margin="3">
                             <Grid Margin="3">
@@ -222,10 +217,16 @@
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Version:"></TextBlock>
                                 <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=PluginVersion}"></TextBlock>
-                                
                             </Grid>
-                            
                         </Border>
+
+                        <Button Content="Plugins homepage" 
+                                Margin="0, 5, 0, 5"
+                                Height="30"
+                                Width="150"
+                                Command="{Binding Source={x:Static command:Commands.OpenUrlCommand}}" 
+                                CommandParameter="{StaticResource Pluginshomepage}" />
+
                         <!--<TextBlock FontSize="9" Text="Advice: Restart is required"></TextBlock>-->
                     </StackPanel>
                 </TabItem>
