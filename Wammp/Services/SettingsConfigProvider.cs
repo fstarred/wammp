@@ -46,6 +46,13 @@ namespace Wammp.Services
 
         public void Load()
         {
+            if (Settings.UpgradeRequired)
+            {
+                Settings.Upgrade();
+                Settings.UpgradeRequired = false;
+                Settings.Save();
+            }
+
             this.Domain = Settings.Domain;
             this.EnableCredentials = Settings.EnableCredentials;
             this.EnableProxy = Settings.EnableProxy;

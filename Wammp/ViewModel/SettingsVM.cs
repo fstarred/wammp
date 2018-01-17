@@ -342,7 +342,13 @@ namespace Wammp.ViewModel
             set {
                 selectedPlugin = value;
                 RaisePropertyChanged(() => SelectedPlugin);
+                RaisePropertyChanged(() => PluginVersion);
             }
+        }
+        
+        public string PluginVersion
+        {
+            get { return selectedPlugin?.Plugin.GetCurrentVersion().ToString(); }            
         }
 
 
@@ -418,7 +424,7 @@ namespace Wammp.ViewModel
         }
         
         void ChangePluginOrder(DIRECTION input)
-        {
+        {            
             int index = plugins.IndexOf(selectedPlugin);
             switch (input)
             {
