@@ -5,6 +5,8 @@
 # W.A.M.M.P.
 W.A.M.M.P. (Windows Audio Modular Media Player, aka WAMMP) project is a pluggable player for windows. It can features a lot of tools for musicians and music listeners as well
 
+![screenshot](https://github.com/fstarred/wammp/blob/master/docs/display.jpg?raw=true) | ![screenshot](https://github.com/fstarred/wammp/blob/master/docs/tempo_plugin.jpg?raw=true) | 
+
 ### Installation
 In order to make WAMMP run, first read instructions on README file. WAMMP project make use of [BASS](http://www.un4seen.com/bass.html) audio library, therefore some external dll dependencies must be downloaded and placed into exe directory.
 
