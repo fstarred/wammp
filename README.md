@@ -1,6 +1,6 @@
 <div data-type="ad" data-publisher="fstarred.github.io" data-format="728x90" data-zone="yamp" data-tags="music%2caudio%2cmedia%2cplayer"></div> 
 
-![logo](https://github.com/fstarred/wammp/blob/master/docs/slider_logo.png)
+![logo](https://github.com/fstarred/wammp/blob/master/docs/slider_logo.png?raw=true)
 
 # W.A.M.M.P.
 W.A.M.M.P. (Windows Audio Modular Media Player, aka WAMMP) project is a pluggable player for windows. It can features a lot of tools for musicians and music listeners as well
