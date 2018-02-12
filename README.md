@@ -11,6 +11,9 @@ In order to make WAMMP run, first read instructions on README file. WAMMP projec
 ### Wiki
 Read the [Guide](https://github.com/fstarred/wammp/wiki) to know more information about the usage
 
+### Plugins
+Check the [plugins page](http://starredmediasoft.com/audio/wammp/plugins.php) for the latest plugins released for WAMMP
+
 ### Donation
 WAMMP is a freeware project that is developed in personal time. You can show your appreciation for this project and support future development by donating.
 
