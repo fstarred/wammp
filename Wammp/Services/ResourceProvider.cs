@@ -13,7 +13,8 @@ namespace Wammp.Services
             {
                 return (Uri)App.Current.Resources["Apphomepage"];
             }
-            set => throw new NotImplementedException();
+            //set => throw new NotImplementedException(); //VS 2017
+            set { throw new NotImplementedException(); }
         }
 
         public Uri VersionCheckUri {
@@ -21,7 +22,7 @@ namespace Wammp.Services
             {
                 return (Uri)App.Current.Resources["VersionCheckUri"];
             }
-            set => throw new NotImplementedException();
+            set { throw new NotImplementedException(); }
         }
 
         public string FacebookAppId
@@ -30,7 +31,7 @@ namespace Wammp.Services
             {
                 return App.Current.Resources["FacebookAppId"].ToString();
             }
-            set => throw new NotImplementedException();
+            set { throw new NotImplementedException(); }
         }
 
         public string FacebookSecretKey
@@ -39,7 +40,7 @@ namespace Wammp.Services
             {
                 return App.Current.Resources["FacebookSecretKey"].ToString();
             }
-            set => throw new NotImplementedException();
+            set { throw new NotImplementedException(); }
         }
         
     }
