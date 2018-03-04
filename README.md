@@ -16,6 +16,9 @@ Read the [Guide](https://github.com/fstarred/wammp/wiki) to know more informatio
 ### Plugins
 Check the [plugins page](http://starredmediasoft.com/audio/wammp/plugins.php) for the latest plugins released for WAMMP
 
+### Audio format
+Go to [Bass add-ons page](http://www.un4seen.com/bass.html#addons) and download the desired audio format
+
 ### Donation
 WAMMP is a freeware project that is developed in personal time. You can show your appreciation for this project and support future development by donating.
 
