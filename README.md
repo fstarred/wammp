@@ -8,7 +8,10 @@ W.A.M.M.P. (Windows Audio Modular Media Player, aka WAMMP) project is a pluggabl
 ![screenshot](https://github.com/fstarred/wammp/blob/master/docs/display.jpg?raw=true) | ![screenshot](https://github.com/fstarred/wammp/blob/master/docs/tempo_plugin.jpg?raw=true) | 
 
 ### Installation
-In order to make WAMMP run, first read instructions on README file. WAMMP project make use of [BASS](http://www.un4seen.com/bass.html) audio library, therefore some external dll dependencies must be downloaded and placed into exe directory.
+Choose for _wammp_x.zip_ for basic version or _wammp\_x\_AIO_ (ALL-IN-ONE) for the basic version with all plugins included.
+For security reason, you must unblock DLL under plugins folder.
+
+Read [Unblock a downloaded file to avoid security warnings](https://blogs.msdn.microsoft.com/delay/p/unblockingdownloadedfile/) for more details
 
 ### Wiki
 Read the [Guide](https://github.com/fstarred/wammp/wiki) to know more information about the usage
