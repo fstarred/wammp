@@ -6,6 +6,8 @@ using Wammp.Naming;
 using Wammp.Services;
 using WammpCommons.Services;
 using WammpCommons.ViewModel;
+using WammpCommons.Utils;
+using System.IO;
 
 namespace Wammp
 {
@@ -17,9 +19,11 @@ namespace Wammp
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             var container = TinyIoCContainer.Current;
-            IMessageProvider messageProvider = new MessageResourceProvider();            
+            IMessageProvider messageProvider = new MessageResourceProvider();
 
-            PluginsHandler.Instance.Load("Plugins");
+            string path = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "plugins");
+
+            PluginsHandler.Instance.Load(path);
 
             container.Register<IDialogFileService>((c, n) =>
             {

@@ -26,12 +26,7 @@ namespace WammpCommons.Utils
 
             return new Version(fileVersionInfo.ProductVersion);
         }
-
-        public static string GetAppLocation()
-        {
-            return System.Reflection.Assembly.GetExecutingAssembly().Location;
-        }
-
+        
         public static bool IsValidRegex(string pattern)
         {
             try
